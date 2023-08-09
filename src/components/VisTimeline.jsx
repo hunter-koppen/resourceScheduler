@@ -1,12 +1,39 @@
 import { Component, createElement, createRef } from "react";
 
-import { Timeline } from "vis-timeline/standalone";
+import { Timeline, DataSet } from "vis-timeline/standalone";
 import "../../node_modules/vis-timeline/dist/vis-timeline-graph2d.min.css";
 
 export class VisTimeline extends Component {
-    schedulerRef = createRef();
+    ref = createRef();
+
+    componentDidMount() {
+        this.initialize();
+    }
+
+    initialize = () => {
+        const items = new DataSet([
+            { id: 1, content: "item 1", start: "2014-04-20", group: 1 },
+            { id: 2, content: "item 2", start: "2014-04-14", group: 1 },
+            { id: 3, content: "item 3", start: "2014-04-18", group: 1 },
+            { id: 4, content: "item 4", start: "2014-04-16", end: "2014-04-19", group: 1 },
+            { id: 5, content: "item 5", start: "2014-04-25", group: 1 },
+            { id: 6, content: "item 6", start: "2014-04-27", type: "point", group: 1 }
+        ]);
+
+        const groups = [
+            {
+                id: 1,
+                content: "Group 1"
+                // Optional: a field 'className', 'style', 'order', [properties]
+            }
+        ];
+
+        const options = {};
+
+        const timeline = new Timeline(this.ref.current, items, groups, options);
+    };
 
     render() {
-        return <div ref={this.schedulerRef} className="resource-scheduler"></div>;
+        return <div ref={this.ref} className="resource-scheduler"></div>;
     }
 }
