@@ -20,8 +20,7 @@ export class ResourceScheduler extends Component {
         this.props.itemData.items.forEach(mxObject => {
             const start = this.props.itemStart.get(mxObject).value;
             const end = this.props.itemEnd.get(mxObject).value;
-            //const content = this.props.itemContent?.get(mxObject);
-            const content = "testsss";
+            const content = this.props.itemContent?.get(mxObject);
             const itemObj = {
                 id: mxObject.id,
                 start,

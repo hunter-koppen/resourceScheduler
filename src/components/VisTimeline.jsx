@@ -1,4 +1,5 @@
-import { Component, createElement, createRef } from "react";
+import React, { Component, createElement, createRef } from "react";
+import ReactDOM from 'react-dom'
 
 import { Timeline, DataSet } from "vis-timeline/standalone";
 import "../../node_modules/vis-timeline/dist/vis-timeline-graph2d.min.css";
@@ -6,6 +7,7 @@ import "../../node_modules/vis-timeline/dist/vis-timeline-graph2d.min.css";
 export class VisTimeline extends Component {
     ref = createRef();
     timeline = null;
+    templateHandler = this.template.bind(this);
 
     componentDidMount() {
         this.initialize();
@@ -69,10 +71,22 @@ export class VisTimeline extends Component {
             },
             type: "range",
             groupHeightMode: this.props.groupHeightMode ? this.props.groupHeightMode : "auto",
-            horizontalScroll: false
+            horizontalScroll: false,
+            template: this.templateHandler,
+            loadingScreenTemplate: () => {
+                return "<h1>Loading...</h1>";
+            }
         };
         return options;
     };
+
+    template(item, element, data) {
+        if (!item) {
+            return "";
+        }
+        let html = ReactDOM.render(<b>{item.content}</b>, element);
+        return "test";
+    }
 
     render() {
         return <div ref={this.ref} className="resource-scheduler"></div>;
