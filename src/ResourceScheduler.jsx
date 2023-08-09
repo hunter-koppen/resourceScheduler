@@ -5,6 +5,6 @@ import "./ui/ResourceScheduler.css";
 
 export class ResourceScheduler extends Component {
     render() {
-        return <VisTimeline sampleText={this.props.sampleText} />;
+        return <VisTimeline groupHeightMode={this.props.groupHeightMode} />;
     }
 }
