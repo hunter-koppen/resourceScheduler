@@ -1,10 +1,10 @@
 import { Component, createElement } from "react";
 
-import { HelloWorldSample } from "./components/HelloWorldSample";
+import { VisTimeline } from "./components/VisTimeline";
 import "./ui/ResourceScheduler.css";
 
 export class ResourceScheduler extends Component {
     render() {
-        return <HelloWorldSample sampleText={this.props.sampleText} />;
+        return <VisTimeline sampleText={this.props.sampleText} />;
     }
 }
