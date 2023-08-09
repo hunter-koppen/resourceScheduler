@@ -3,7 +3,7 @@
     xmlns="http://www.mendix.com/widget/1.0/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../node_modules/mendix/custom_widget.xsd">
     <name>Resource Scheduler</name>
-    <description>My widget description</description>
+    <description/>
     <icon/>
     <properties>
         <propertyGroup caption="Groups">
@@ -16,6 +16,32 @@
                         <enumerationValue key="fixed">Fixed</enumerationValue>
                         <enumerationValue key="fitItems">FitItems</enumerationValue>
                     </enumerationValues>
+                </property>
+            </propertyGroup>
+        </propertyGroup>
+        <propertyGroup caption="Items">
+            <propertyGroup caption="Datasource">
+                <property key="itemData" type="datasource" required="false" isList="true">
+                    <caption>Items</caption>
+                    <description>Return the list of items you wish to show in the scheduler</description>
+                </property>
+                <property key="itemContent" type="widgets" required="false" dataSource="itemData">
+                    <caption>Content</caption>
+                    <description>The content to render inside an Item</description>
+                </property>
+                <property key="itemStart" type="attribute" required="true" dataSource="itemData">
+                    <caption>StartTime</caption>
+                    <description/>
+                    <attributeTypes>
+                        <attributeType name="DateTime"/>
+                    </attributeTypes>
+                </property>
+                <property key="itemEnd" type="attribute" required="true" dataSource="itemData">
+                    <caption>EndTime</caption>
+                    <description/>
+                    <attributeTypes>
+                        <attributeType name="DateTime"/>
+                    </attributeTypes>
                 </property>
             </propertyGroup>
         </propertyGroup>

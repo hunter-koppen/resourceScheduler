@@ -11,14 +11,26 @@ export class VisTimeline extends Component {
         this.initialize();
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.itemData !== this.props.itemData) {
+            this.timeline.setItems(this.props.itemData);
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.timeline) {
+            this.timeline.destroy();
+        }
+    }
+
     initialize = () => {
         const items = new DataSet([
-            { id: 1, content: "item 1", start: "2014-04-20", group: 1 },
-            { id: 2, content: "item 2", start: "2014-04-14", group: 1 },
-            { id: 3, content: "item 3", start: "2014-04-18", group: 1 },
-            { id: 4, content: "item 4", start: "2014-04-16", type: "range", end: "2014-04-19", group: 1 },
-            { id: 5, content: "item 5", start: "2014-04-25", group: 1 },
-            { id: 6, content: "item 6", start: "2014-04-27", type: "point", group: 1 }
+            { id: 1, content: "item 1", start: "2014-04-20", end: "2014-04-21", group: 1 },
+            { id: 2, content: "item 2", start: "2014-04-14", end: "2014-04-21", group: 1 },
+            { id: 3, content: "item 3", start: "2014-04-18", end: "2014-04-21", group: 1 },
+            { id: 4, content: "item 4", start: "2014-04-16", end: "2014-04-17", group: 1 },
+            { id: 5, content: "item 5", start: "2014-04-25", end: "2014-04-26", group: 1 },
+            { id: 6, content: "item 6", start: "2014-04-27", end: "2014-04-28", group: 1 }
         ]);
 
         const groups = [
@@ -30,9 +42,15 @@ export class VisTimeline extends Component {
             }
         ];
 
-        // options to add later: format, 
+        this.timeline = new Timeline(this.ref.current, this.props.itemData, groups, this.getOptions());
+    };
+
+    getOptions = () => {
+        // options to add later: format, zoomkey, tooltip settings, height & maxheight, start & enddates, moveable, timeaxisscale
+        // item titles will be displayed as a tooltip.
 
         const options = {
+            locale: mx.session.sessionData.locale.code,
             editable: {
                 add: true, // If true, new items can be created by double tapping an empty space in the Timeline. See section Editing Items for a detailed explanation.
                 updateTime: true, // If true, items can be dragged to another moment in time. See section Editing Items for a detailed explanation.
@@ -40,10 +58,20 @@ export class VisTimeline extends Component {
                 remove: false, // If true, items can be deleted by first selecting them, and then clicking the delete button on the top right of the item. See section Editing Items for a detailed explanation.
                 overrideItems: true // If true, item specific editable properties are overridden by timeline settings
             },
-            groupHeightMode: this.props.groupHeightMode ? this.props.groupHeightMode : 'auto'
+            tooltip: {
+                delay: 100
+            },
+            showWeekScale: true,
+            zoomMin: 86400000, // 24 hours
+            orientation: {
+                axis: "top",
+                item: "bottom"
+            },
+            type: "range",
+            groupHeightMode: this.props.groupHeightMode ? this.props.groupHeightMode : "auto",
+            horizontalScroll: false
         };
-
-        this.timeline = new Timeline(this.ref.current, items, groups, options);
+        return options;
     };
 
     render() {
