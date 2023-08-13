@@ -8,9 +8,8 @@ export class VisTimeline extends Component {
     ref = createRef();
     timeline = null;
     templateHandler = this.template.bind(this);
-    state = {
-        portalItems: []
-    };
+    portalItems = [];
+    amountOfItems = null;
 
     componentDidMount() {
         this.initialize();
@@ -18,6 +17,7 @@ export class VisTimeline extends Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.itemData !== this.props.itemData) {
+            this.amountOfItems = this.props.itemData.length;
             this.timeline.setItems(this.props.itemData);
         }
     }
@@ -38,6 +38,7 @@ export class VisTimeline extends Component {
             }
         ];
 
+        this.amountOfItems = this.props.itemData.length
         this.timeline = new Timeline(this.ref.current, this.props.itemData, groups, this.getOptions());
     };
 
@@ -78,19 +79,25 @@ export class VisTimeline extends Component {
         if (!item) {
             return "";
         }
-        const portals = this.state.portalItems;
-        portals.push({ item, element });
-        this.setState({
-            portalItem: portals
-        });
 
+        // Check if the item is already in the portalItems list
+        const itemExists = this.portalItems.some(entry => entry.item === item);
+        if (!itemExists) {
+            this.portalItems.push({ item, element });
+        }
+
+        // Check if all the items have been rendered in the dom so we can render all reactnodes.
+        if (this.amountOfItems === this.portalItems.length) {
+            this.forceUpdate();
+        }
         return "";
     }
 
     renderPortals() {
-        return this.state.portalItems.map((portalItem, index) => {
+        debugger;
+        return this.portalItems.map((portalItem, index) => {
             const { item, element } = portalItem;
-            return createPortal(item.content, element);
+            return createPortal(item.content, element, item.id);
         });
     }
 
