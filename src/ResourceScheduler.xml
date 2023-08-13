@@ -25,7 +25,7 @@
                     <caption>Items</caption>
                     <description>Return the list of items you wish to show in the scheduler</description>
                 </property>
-                <property key="itemContent" type="widgets" required="false" dataSource="itemData">
+                <property key="itemContent" type="widgets" required="false">
                     <caption>Content</caption>
                     <description>The content to render inside an Item</description>
                 </property>

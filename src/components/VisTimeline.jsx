@@ -1,5 +1,5 @@
 import React, { Component, createElement, createRef } from "react";
-import ReactDOM from 'react-dom'
+import { createPortal } from "react-dom";
 
 import { Timeline, DataSet } from "vis-timeline/standalone";
 import "../../node_modules/vis-timeline/dist/vis-timeline-graph2d.min.css";
@@ -8,6 +8,9 @@ export class VisTimeline extends Component {
     ref = createRef();
     timeline = null;
     templateHandler = this.template.bind(this);
+    state = {
+        portalItems: []
+    };
 
     componentDidMount() {
         this.initialize();
@@ -26,15 +29,6 @@ export class VisTimeline extends Component {
     }
 
     initialize = () => {
-        const items = new DataSet([
-            { id: 1, content: "item 1", start: "2014-04-20", end: "2014-04-21", group: 1 },
-            { id: 2, content: "item 2", start: "2014-04-14", end: "2014-04-21", group: 1 },
-            { id: 3, content: "item 3", start: "2014-04-18", end: "2014-04-21", group: 1 },
-            { id: 4, content: "item 4", start: "2014-04-16", end: "2014-04-17", group: 1 },
-            { id: 5, content: "item 5", start: "2014-04-25", end: "2014-04-26", group: 1 },
-            { id: 6, content: "item 6", start: "2014-04-27", end: "2014-04-28", group: 1 }
-        ]);
-
         const groups = [
             {
                 id: 1,
@@ -74,7 +68,7 @@ export class VisTimeline extends Component {
             horizontalScroll: false,
             template: this.templateHandler,
             loadingScreenTemplate: () => {
-                return "<h1>Loading...</h1>";
+                return "<h4>Loading...</h4>";
             }
         };
         return options;
@@ -84,11 +78,27 @@ export class VisTimeline extends Component {
         if (!item) {
             return "";
         }
-        let html = ReactDOM.render(<b>{item.content}</b>, element);
-        return "test";
+        const portals = this.state.portalItems;
+        portals.push({ item, element });
+        this.setState({
+            portalItem: portals
+        });
+
+        return "";
+    }
+
+    renderPortals() {
+        return this.state.portalItems.map((portalItem, index) => {
+            const { item, element } = portalItem;
+            return createPortal(item.content, element);
+        });
     }
 
     render() {
-        return <div ref={this.ref} className="resource-scheduler"></div>;
+        return (
+            <div ref={this.ref} className="resource-scheduler">
+                {this.renderPortals()}
+            </div>
+        );
     }
 }

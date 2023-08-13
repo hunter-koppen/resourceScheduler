@@ -1,4 +1,5 @@
-import { Component, createElement } from "react";
+import React, { Component, createElement } from "react";
+import ReactDOM from "react-dom";
 
 import { VisTimeline } from "./components/VisTimeline";
 import "./ui/ResourceScheduler.css";
@@ -11,7 +12,9 @@ export class ResourceScheduler extends Component {
     componentDidUpdate(prevProps) {
         // items datasource is loaded so we can create timeline items from it
         if (prevProps.itemData.status === "loading" && this.props.itemData.status === "available") {
-            this.updateItems();
+            setTimeout(() => {
+                this.updateItems();
+            }, 200);
         }
     }
 
@@ -20,7 +23,7 @@ export class ResourceScheduler extends Component {
         this.props.itemData.items.forEach(mxObject => {
             const start = this.props.itemStart.get(mxObject).value;
             const end = this.props.itemEnd.get(mxObject).value;
-            const content = this.props.itemContent?.get(mxObject);
+            const content = this.props.itemContent;
             const itemObj = {
                 id: mxObject.id,
                 start,
