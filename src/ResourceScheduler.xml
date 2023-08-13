@@ -7,6 +7,23 @@
     <icon/>
     <properties>
         <propertyGroup caption="Groups">
+            <propertyGroup caption="Datasource">
+                <property key="groupData" type="datasource" required="false" isList="true">
+                    <caption>Groups</caption>
+                    <description>Return the list of groups you wish to show in the scheduler</description>
+                </property>
+                <property key="groupContent" type="widgets" required="false" dataSource="groupData">
+                    <caption>Content</caption>
+                    <description>The content to render inside a group</description>
+                </property>
+                <property key="groupId" type="attribute" required="true" dataSource="groupData">
+                    <caption>Group ID</caption>
+                    <description/>
+                    <attributeTypes>
+                        <attributeType name="String"/>
+                    </attributeTypes>
+                </property>
+            </propertyGroup>
             <propertyGroup caption="Settings">
                 <property key="groupHeightMode" type="enumeration" defaultValue="auto">
                     <caption>Group height</caption>
@@ -41,6 +58,13 @@
                     <description/>
                     <attributeTypes>
                         <attributeType name="DateTime"/>
+                    </attributeTypes>
+                </property>
+                <property key="itemGroupId" type="attribute" required="true" dataSource="itemData">
+                    <caption>Group ID</caption>
+                    <description>Use an association to select the group Id</description>
+                    <attributeTypes>
+                        <attributeType name="String"/>
                     </attributeTypes>
                 </property>
             </propertyGroup>

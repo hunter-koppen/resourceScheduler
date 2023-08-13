@@ -1,4 +1,4 @@
-import React, { Component, createElement, createRef } from "react";
+import { Component, createElement, createRef } from "react";
 import { createPortal } from "react-dom";
 
 import { Timeline, DataSet } from "vis-timeline/standalone";
@@ -7,8 +7,10 @@ import "../../node_modules/vis-timeline/dist/vis-timeline-graph2d.min.css";
 export class VisTimeline extends Component {
     ref = createRef();
     timeline = null;
-    templateHandler = this.template.bind(this);
+    itemTemplateHandler = this.itemTemplate.bind(this);
+    groupTemplateHandler = this.groupTemplate.bind(this);
     portalItems = [];
+    portalGroups = [];
     amountOfItems = null;
 
     componentDidMount() {
@@ -16,6 +18,9 @@ export class VisTimeline extends Component {
     }
 
     componentDidUpdate(prevProps) {
+        if (prevProps.groupData !== this.props.groupData) {
+            this.timeline.setGroups(this.props.groupData);
+        }
         if (prevProps.itemData !== this.props.itemData) {
             this.amountOfItems = this.props.itemData.length;
             this.timeline.setItems(this.props.itemData);
@@ -29,17 +34,8 @@ export class VisTimeline extends Component {
     }
 
     initialize = () => {
-        const groups = [
-            {
-                id: 1,
-                content: "Group 1",
-                order: 1
-                // Optional: a field 'className', 'style', 'order', [properties]
-            }
-        ];
-
-        this.amountOfItems = this.props.itemData.length
-        this.timeline = new Timeline(this.ref.current, this.props.itemData, groups, this.getOptions());
+        this.amountOfItems = this.props.itemData.length;
+        this.timeline = new Timeline(this.ref.current, this.props.itemData, this.props.groupData, this.getOptions());
     };
 
     getOptions = () => {
@@ -67,7 +63,8 @@ export class VisTimeline extends Component {
             type: "range",
             groupHeightMode: this.props.groupHeightMode ? this.props.groupHeightMode : "auto",
             horizontalScroll: false,
-            template: this.templateHandler,
+            template: this.itemTemplateHandler,
+            groupTemplate: this.groupTemplateHandler,
             loadingScreenTemplate: () => {
                 return "<h4>Loading...</h4>";
             }
@@ -75,7 +72,7 @@ export class VisTimeline extends Component {
         return options;
     };
 
-    template(item, element, data) {
+    itemTemplate(item, element, data) {
         if (!item) {
             return "";
         }
@@ -93,18 +90,38 @@ export class VisTimeline extends Component {
         return "";
     }
 
-    renderPortals() {
-        debugger;
+    groupTemplate(group, element, data) {
+        if (!group) {
+            return "";
+        }
+
+        // Check if the item is already in the portalItems list
+        const groupExists = this.portalGroups.some(entry => entry.group === group);
+        if (!groupExists) {
+            this.portalGroups.push({ group, element });
+        }
+        return "";
+    }
+
+    renderPortalItems() {
         return this.portalItems.map((portalItem, index) => {
             const { item, element } = portalItem;
             return createPortal(item.content, element, item.id);
         });
     }
 
+    renderPortalGroups() {
+        return this.portalGroups.map((portalGroup, index) => {
+            const { group, element } = portalGroup;
+            return createPortal(group.content, element, group.id);
+        });
+    }
+
     render() {
         return (
             <div ref={this.ref} className="resource-scheduler">
-                {this.renderPortals()}
+                {this.renderPortalGroups()}
+                {this.renderPortalItems()}
             </div>
         );
     }

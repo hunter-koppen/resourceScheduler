@@ -1,26 +1,46 @@
-import React, { Component, createElement } from "react";
-import ReactDOM from "react-dom";
+import { Component, createElement } from "react";
 
 import { VisTimeline } from "./components/VisTimeline";
 import "./ui/ResourceScheduler.css";
 
 export class ResourceScheduler extends Component {
     state = {
+        groupData: [],
         itemData: []
     };
 
     componentDidUpdate(prevProps) {
         // items datasource is loaded so we can create timeline items from it
+        if (prevProps.groupData.status === "loading" && this.props.groupData.status === "available") {
+            this.updateGroups();
+        }
         if (prevProps.itemData.status === "loading" && this.props.itemData.status === "available") {
-            setTimeout(() => {
-                this.updateItems();
-            }, 200);
+            this.updateItems();
         }
     }
+
+    updateGroups = () => {
+        const groupsArray = [];
+        this.props.groupData.items.forEach(mxObject => {
+            const groupId = this.props.groupId.get(mxObject).value;
+            const content = this.props.groupContent.get(mxObject);
+            const groupObj = {
+                id: groupId,
+                content,
+                order: 1
+            };
+            groupsArray.push(groupObj);
+        });
+        this.setState({
+            groupData: groupsArray
+        });
+    };
 
     updateItems = () => {
         const itemsArray = [];
         this.props.itemData.items.forEach(mxObject => {
+            debugger;
+            const groupId = this.props.itemGroupId.get(mxObject).value;
             const start = this.props.itemStart.get(mxObject).value;
             const end = this.props.itemEnd.get(mxObject).value;
             const content = this.props.itemContent.get(mxObject);
@@ -29,7 +49,7 @@ export class ResourceScheduler extends Component {
                 start,
                 end,
                 content,
-                group: 1
+                group: groupId
             };
             itemsArray.push(itemObj);
         });
@@ -39,6 +59,6 @@ export class ResourceScheduler extends Component {
     };
 
     render() {
-        return <VisTimeline itemData={this.state.itemData} groupHeightMode={this.props.groupHeightMode} />;
+        return <VisTimeline itemData={this.state.itemData} groupData={this.state.groupData} groupHeightMode={this.props.groupHeightMode} />;
     }
 }
