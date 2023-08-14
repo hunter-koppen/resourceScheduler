@@ -6,6 +6,20 @@
     <description/>
     <icon/>
     <properties>
+        <propertyGroup caption="Timeline">
+            <propertyGroup caption="Time view">
+                <property key="dayStart" type="expression" required="true" defaultValue="'08:00'">
+                    <caption>Day start</caption>
+                    <description>Start time of the day (for example 08:00).</description>
+                    <returnType type="String" />
+                </property>
+                <property key="dayEnd" type="expression" required="true" defaultValue="'18:00'">
+                    <caption>Day end</caption>
+                    <description>Start time of the day (for example 18:00).</description>
+                    <returnType type="String" />
+                </property>
+            </propertyGroup>
+        </propertyGroup>
         <propertyGroup caption="Groups">
             <propertyGroup caption="Datasource">
                 <property key="groupData" type="datasource" required="false" isList="true">
@@ -25,7 +39,7 @@
                 </property>
             </propertyGroup>
             <propertyGroup caption="Settings">
-                <property key="groupHeightMode" type="enumeration" defaultValue="auto">
+                <property key="groupHeightMode" type="enumeration" defaultValue="fitItems">
                     <caption>Group height</caption>
                     <description>Specifies how the height of a group is calculated.</description>
                     <enumerationValues>

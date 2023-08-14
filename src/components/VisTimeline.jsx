@@ -41,6 +41,8 @@ export class VisTimeline extends Component {
     getOptions = () => {
         // options to add later: format, zoomkey, tooltip settings, height & maxheight, start & enddates, moveable, timeaxisscale
         // item titles will be displayed as a tooltip.
+        const startOfDay = new Date(2023, 8, 14, 0, 0, 0, 0);
+        const endOfDay = new Date(2023, 8, 15, 0, 0, 0, 0);
 
         const options = {
             locale: mx.session.sessionData.locale.code,
@@ -61,10 +63,23 @@ export class VisTimeline extends Component {
                 item: "bottom"
             },
             type: "range",
+            stack: false,
             groupHeightMode: this.props.groupHeightMode ? this.props.groupHeightMode : "auto",
             horizontalScroll: false,
             template: this.itemTemplateHandler,
             groupTemplate: this.groupTemplateHandler,
+            hiddenDates: [
+                {
+                    start: startOfDay,
+                    end: this.props.dayStart,
+                    repeat: "daily"
+                },
+                {
+                    start: this.props.dayEnd,
+                    end: endOfDay,
+                    repeat: "daily"
+                }
+            ],
             loadingScreenTemplate: () => {
                 return "<h4>Loading...</h4>";
             }
