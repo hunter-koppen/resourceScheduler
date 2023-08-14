@@ -6,8 +6,6 @@ import "./ui/ResourceScheduler.css";
 export class ResourceScheduler extends Component {
     state = {
         initialize: false,
-        dayStart: null,
-        dayEnd: null,
         groupData: [],
         itemData: []
     };
@@ -22,31 +20,29 @@ export class ResourceScheduler extends Component {
         }
 
         // Check if all required fields are populated, then render the timeline
-        if (!this.state.initialize && this.props.dayStart && this.props.dayEnd) {
-
+        if (!this.state.initialize && this.props.dayStart && this.props.dayEnd && this.props.hideWeekends) {
             this.setState({
-                initialize: true,
-                dayStart: this.convertToDate(this.props.dayStart),
-                dayEnd: this.convertToDate(this.props.dayEnd)
+                initialize: true
             });
         }
     }
 
-    convertToDate = (timeString) => {
+    convertToDate = timeString => {
         const [hour, minute] = timeString.value.split(":").map(Number);
         const date = new Date(2023, 8, 14);
         date.setHours(hour);
         date.setMinutes(minute);
         return date;
-    }
+    };
 
     updateGroups = () => {
+        const { groupData, groupId, groupContent } = this.props;
         const groupsArray = [];
-        this.props.groupData.items.forEach(mxObject => {
-            const groupId = this.props.groupId.get(mxObject).value;
-            const content = this.props.groupContent.get(mxObject);
+        groupData.items.forEach(mxObject => {
+            const id = groupId.get(mxObject).value;
+            const content = groupContent.get(mxObject);
             const groupObj = {
-                id: groupId,
+                id,
                 content,
                 order: 1
             };
@@ -58,18 +54,19 @@ export class ResourceScheduler extends Component {
     };
 
     updateItems = () => {
+        const { itemData, itemGroupId, itemStart, itemEnd, itemContent } = this.props;
         const itemsArray = [];
-        this.props.itemData.items.forEach(mxObject => {
-            const groupId = this.props.itemGroupId.get(mxObject).value;
-            const start = this.props.itemStart.get(mxObject).value;
-            const end = this.props.itemEnd.get(mxObject).value;
-            const content = this.props.itemContent.get(mxObject);
+        itemData.items.forEach(mxObject => {
+            const group = itemGroupId.get(mxObject).value;
+            const start = itemStart.get(mxObject).value;
+            const end = itemEnd.get(mxObject).value;
+            const content = itemContent.get(mxObject);
             const itemObj = {
                 id: mxObject.id,
                 start,
                 end,
                 content,
-                group: groupId
+                group
             };
             itemsArray.push(itemObj);
         });
@@ -82,8 +79,11 @@ export class ResourceScheduler extends Component {
         if (this.state.initialize) {
             return (
                 <VisTimeline
-                    dayStart={this.state.dayStart}
-                    dayEnd={this.state.dayEnd}
+                    timelineStart={this.props.timelineStart?.value}
+                    timelineEnd={this.props.timelineEnd?.value}
+                    dayStart={this.convertToDate(this.props.dayStart)}
+                    dayEnd={this.convertToDate(this.props.dayEnd)}
+                    hideWeekends={this.props.hideWeekends.value}
                     itemData={this.state.itemData}
                     groupData={this.state.groupData}
                     groupHeightMode={this.props.groupHeightMode}

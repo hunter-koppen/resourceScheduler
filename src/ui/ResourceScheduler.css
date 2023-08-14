@@ -1,6 +1,8 @@
 .resource-scheduler .vis-timeline .vis-item {
     border: none;
     border-radius: 0;
+    overflow: hidden;
+    background: transparent;
 }
 .resource-scheduler .vis-item .vis-item-content {
     padding: 0;
