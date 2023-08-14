@@ -39,7 +39,6 @@ export class ResourceScheduler extends Component {
     updateItems = () => {
         const itemsArray = [];
         this.props.itemData.items.forEach(mxObject => {
-            debugger;
             const groupId = this.props.itemGroupId.get(mxObject).value;
             const start = this.props.itemStart.get(mxObject).value;
             const end = this.props.itemEnd.get(mxObject).value;

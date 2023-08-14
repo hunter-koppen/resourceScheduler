@@ -1,6 +1,10 @@
-/*
-Place your custom CSS here
-*/
-.widget-hello-world {
-
+.vis-item {
+    border: none;
+    border-radius: 0;
+}
+.vis-item .vis-item-content {
+    padding: 0;
+}
+.vis-item.vis-range .vis-item-content {
+    display: block;
 }

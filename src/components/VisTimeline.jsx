@@ -55,7 +55,7 @@ export class VisTimeline extends Component {
                 delay: 100
             },
             showWeekScale: true,
-            zoomMin: 86400000, // 24 hours
+            zoomMin: 7200000, // 2 hours
             orientation: {
                 axis: "top",
                 item: "bottom"
