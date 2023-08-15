@@ -106,6 +106,11 @@ export class ResourceScheduler extends Component {
         this.dragging = true;
     };
 
+    onMove = (item, callback) => {
+        console.log(item);
+        callback(item);
+    }
+
     render() {
         if (this.state.initialize) {
             return (
@@ -121,6 +126,7 @@ export class ResourceScheduler extends Component {
                     mouseUp={this.mouseUp}
                     mouseDown={this.mouseDown}
                     mouseMove={this.mouseMove}
+                    onMove={this.onMove}
                 />
             );
         } else {

@@ -133,8 +133,8 @@
             </propertyGroup>
             <propertyGroup caption="Click">
                 <property key="onClick" type="action" required="false">
-                    <caption>On click</caption>
-                    <description>Action to call when clicking somewhere on the timeline</description>
+                    <caption>On timeline click</caption>
+                    <description>Action to call when clicking somewhere on the timeline that is not an item, you can use this to create new items.</description>
                 </property>
             </propertyGroup>
         </propertyGroup>

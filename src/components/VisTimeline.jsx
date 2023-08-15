@@ -65,7 +65,10 @@ export class VisTimeline extends Component {
             }
 
             // Check if the timeline view range has changed
-            if (prevProps.timelineStart.getTime() !== timelineStart.getTime() || prevProps.timelineEnd.getTime() !== timelineEnd.getTime()) {
+            if (
+                prevProps.timelineStart.getTime() !== timelineStart.getTime() ||
+                prevProps.timelineEnd.getTime() !== timelineEnd.getTime()
+            ) {
                 this.rangeStart = timelineStart;
                 this.rangeEnd = timelineStart;
                 this.timeline.setWindow(timelineStart, timelineEnd);
@@ -115,6 +118,8 @@ export class VisTimeline extends Component {
             stack: false,
             start: this.props.timelineStart,
             end: this.props.timelineEnd,
+            onMove: this.props.onMove,
+            itemsAlwaysDraggable: { item: true, range: true },
             groupHeightMode: this.props.groupHeightMode ? this.props.groupHeightMode : "auto",
             horizontalScroll: false,
             template: this.itemTemplateHandler,
@@ -204,13 +209,13 @@ export class VisTimeline extends Component {
         }
     };
 
-    onRangeChanged = (view) => {
+    onRangeChanged = view => {
         if (this.rangeStart?.getTime() !== view.start.getTime() || this.rangeEnd?.getTime() !== view.end.getTime()) {
             this.rangeStart = view.start;
             this.rangeEnd = view.end;
             //this.props.onRangeChanged(view.start, view.end); event for ranged changed later
         }
-    }
+    };
 
     render() {
         return (
