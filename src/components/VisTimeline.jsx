@@ -87,7 +87,7 @@ export class VisTimeline extends Component {
     };
 
     getOptions = () => {
-        // options to add later: format, zoomkey, tooltip settings, height & maxheight, start & enddates, moveable, timeaxisscale
+        // options to add later: format, zoomkey, tooltip settings, height & maxheight, moveable, timeaxisscale
         // item titles will be displayed as a tooltip.
 
         const options = {

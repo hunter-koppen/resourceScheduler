@@ -98,6 +98,13 @@
                         <attributeType name="String"/>
                     </attributeTypes>
                 </property>
+                <property key="itemTooltipText" type="attribute" required="false" dataSource="itemData">
+                    <caption>Tooltip Text</caption>
+                    <description>The text to show in the tooltip when hovering over an item.</description>
+                    <attributeTypes>
+                        <attributeType name="String"/>
+                    </attributeTypes>
+                </property>
             </propertyGroup>
         </propertyGroup>
     </properties>
