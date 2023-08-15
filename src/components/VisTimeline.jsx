@@ -84,6 +84,9 @@ export class VisTimeline extends Component {
         this.timeline = new Timeline(this.ref.current, this.props.itemData, this.props.groupData, this.getOptions());
 
         this.timeline.on("rangechanged", this.onRangeChanged);
+        this.timeline.on("mouseDown", this.props.mouseDown);
+        this.timeline.on("mouseMove", this.props.mouseMove);
+        this.timeline.on("mouseUp", this.props.mouseUp);
     };
 
     getOptions = () => {

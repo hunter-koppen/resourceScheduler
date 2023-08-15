@@ -4,6 +4,8 @@ import { VisTimeline } from "./components/VisTimeline";
 import "./ui/ResourceScheduler.css";
 
 export class ResourceScheduler extends Component {
+    clicking = false;
+    dragging = false;
     state = {
         initialize: false,
         groupData: [],
@@ -77,6 +79,33 @@ export class ResourceScheduler extends Component {
         });
     };
 
+    mouseUp = event => {
+        if (event && !event.item && !this.dragging) {
+            console.log(event);
+            if (this.props.clickedDateTime && event.snappedTime) {
+                const timestamp = Date.parse(event.snappedTime);
+                this.props.clickedDateTime.setValue(new Date(timestamp));
+            }
+            if (this.props.clickedGroupId && event.group) {
+                this.props.clickedGroupId.setValue(event.group);
+            }
+            if (this.props.onClick && this.props.onClick.canExecute) {
+                this.props.onClick.execute();
+            }
+        }
+        this.clicking = false;
+        this.dragging = false;
+    };
+
+    mouseDown = () => {
+        this.clicking = true;
+        this.dragging = false;
+    };
+
+    mouseMove = () => {
+        this.dragging = true;
+    };
+
     render() {
         if (this.state.initialize) {
             return (
@@ -89,6 +118,9 @@ export class ResourceScheduler extends Component {
                     itemData={this.state.itemData}
                     groupData={this.state.groupData}
                     groupHeightMode={this.props.groupHeightMode}
+                    mouseUp={this.mouseUp}
+                    mouseDown={this.mouseDown}
+                    mouseMove={this.mouseMove}
                 />
             );
         } else {

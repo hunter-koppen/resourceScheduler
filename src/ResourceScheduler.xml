@@ -1,10 +1,17 @@
-<?xml version="1.0" encoding="utf-8"?>
-<widget id="kobeon.resourcescheduler.ResourceScheduler" pluginWidget="true" needsEntityContext="true" offlineCapable="true" supportedPlatform="Web"
+<?xml version="1.0" encoding="utf-8" ?>
+<widget
+    id="kobeon.resourcescheduler.ResourceScheduler"
+    pluginWidget="true"
+    needsEntityContext="true"
+    offlineCapable="true"
+    supportedPlatform="Web"
     xmlns="http://www.mendix.com/widget/1.0/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../node_modules/mendix/custom_widget.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.mendix.com/widget/1.0/ ../node_modules/mendix/custom_widget.xsd"
+>
     <name>Resource Scheduler</name>
-    <description/>
-    <icon/>
+    <description />
+    <icon />
     <properties>
         <propertyGroup caption="Timeline">
             <propertyGroup caption="Time view">
@@ -32,7 +39,7 @@
                 </property>
                 <property key="hideWeekends" type="expression" defaultValue="true">
                     <caption>Hide weekends</caption>
-                    <description/>
+                    <description />
                     <returnType type="Boolean" />
                 </property>
             </propertyGroup>
@@ -49,9 +56,9 @@
                 </property>
                 <property key="groupId" type="attribute" required="true" dataSource="groupData">
                     <caption>Group ID</caption>
-                    <description/>
+                    <description />
                     <attributeTypes>
-                        <attributeType name="String"/>
+                        <attributeType name="String" />
                     </attributeTypes>
                 </property>
             </propertyGroup>
@@ -79,31 +86,55 @@
                 </property>
                 <property key="itemStart" type="attribute" required="true" dataSource="itemData">
                     <caption>StartTime</caption>
-                    <description/>
+                    <description />
                     <attributeTypes>
-                        <attributeType name="DateTime"/>
+                        <attributeType name="DateTime" />
                     </attributeTypes>
                 </property>
                 <property key="itemEnd" type="attribute" required="true" dataSource="itemData">
                     <caption>EndTime</caption>
-                    <description/>
+                    <description />
                     <attributeTypes>
-                        <attributeType name="DateTime"/>
+                        <attributeType name="DateTime" />
                     </attributeTypes>
                 </property>
                 <property key="itemGroupId" type="attribute" required="true" dataSource="itemData">
                     <caption>Group ID</caption>
                     <description>Use an association to select the group Id</description>
                     <attributeTypes>
-                        <attributeType name="String"/>
+                        <attributeType name="String" />
                     </attributeTypes>
                 </property>
                 <property key="itemTooltipText" type="attribute" required="false" dataSource="itemData">
                     <caption>Tooltip Text</caption>
                     <description>The text to show in the tooltip when hovering over an item.</description>
                     <attributeTypes>
-                        <attributeType name="String"/>
+                        <attributeType name="String" />
                     </attributeTypes>
+                </property>
+            </propertyGroup>
+        </propertyGroup>
+        <propertyGroup caption="Events">
+            <propertyGroup caption="Data">
+                <property key="clickedDateTime" type="attribute" required="false">
+                    <caption>Clicked Time Attribute</caption>
+                    <description>Attribute that will contain the datetime of where you clicked on the timeline</description>
+                    <attributeTypes>
+                        <attributeType name="DateTime" />
+                    </attributeTypes>
+                </property>
+                <property key="clickedGroupId" type="attribute" required="false">
+                    <caption>Clicked Group</caption>
+                    <description>Attribute that will contain the group id</description>
+                    <attributeTypes>
+                        <attributeType name="String" />
+                    </attributeTypes>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Click">
+                <property key="onClick" type="action" required="false">
+                    <caption>On click</caption>
+                    <description>Action to call when clicking somewhere on the timeline</description>
                 </property>
             </propertyGroup>
         </propertyGroup>
