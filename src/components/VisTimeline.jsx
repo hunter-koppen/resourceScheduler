@@ -1,8 +1,9 @@
 import { Component, createElement, createRef } from "react";
-import { createPortal } from "react-dom";
 
 import { Timeline, DataSet } from "vis-timeline/standalone";
 import "../../node_modules/vis-timeline/dist/vis-timeline-graph2d.min.css";
+
+import { renderItems, renderGroups } from "../utils/Utils";
 
 export class VisTimeline extends Component {
     ref = createRef();
@@ -26,7 +27,7 @@ export class VisTimeline extends Component {
         if (this.timeline) {
             const { groupData, itemData, dayStart, dayEnd, hideWeekends, timelineStart, timelineEnd } = this.props;
             if (prevProps.groupData !== groupData) {
-                this.timeline.setGroups(groupData);
+                this.updateGroups();
             }
             if (prevProps.itemData !== itemData) {
                 this.updateItems();
@@ -189,30 +190,6 @@ export class VisTimeline extends Component {
         return "";
     }
 
-    renderPortalItems() {
-        if (this.portalItems) {
-            return this.portalItems.map((portalItem, index) => {
-                const { item, element } = portalItem;
-                return createPortal(item.content, element, item.id);
-            });
-        }
-    }
-
-    renderPortalGroups() {
-        if (this.portalGroups) {
-            return this.portalGroups.map((portalGroup, index) => {
-                const { group, element } = portalGroup;
-                return createPortal(group.content, element, group.id);
-            });
-        }
-    }
-
-    redraw = () => {
-        if (this.timeline) {
-            this.timeline.redraw();
-        }
-    };
-
     updateItems = () => {
         const { itemData } = this.props;
         const timelineItems = this.timeline.itemsData;
@@ -230,6 +207,20 @@ export class VisTimeline extends Component {
         timelineItems.update(itemData);
     };
 
+    updateGroups = () => {
+        const { groupData } = this.props;
+        const timelineGroups = this.timeline.groupsData;
+
+        // Check if we need to remove old items that dont exist in the latest Mx data
+        const toRemove = timelineGroups.get({
+            filter: group => !groupData.find(g => g.id === group.id)
+        });
+        timelineGroups.remove(toRemove);
+
+        // Run the update function based on the latest Mx data
+        timelineGroups.update(groupData);
+    };
+
     onRangeChanged = view => {
         if (this.rangeStart?.getTime() !== view.start.getTime() || this.rangeEnd?.getTime() !== view.end.getTime()) {
             this.rangeStart = view.start;
@@ -238,11 +229,18 @@ export class VisTimeline extends Component {
         }
     };
 
+    redraw = () => {
+        // temporary test function
+        if (this.timeline) {
+            this.timeline.redraw();
+        }
+    };
+
     render() {
         return (
             <div ref={this.ref} className="resource-scheduler">
-                {this.renderPortalGroups()}
-                {this.renderPortalItems()}
+                {renderGroups(this.portalGroups)}
+                {renderItems(this.portalItems)}
                 <button onClick={this.redraw}>redraw test</button>
             </div>
         );
