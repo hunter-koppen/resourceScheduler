@@ -102,7 +102,7 @@ export class ResourceScheduler extends Component {
             // Handle click on item
             else {
                 if (this.props.onItemClick) {
-                    const clickedItem = this.props.itemData.items.find(mxObject => mxObject.id === event.item.id);
+                    const clickedItem = this.props.itemData.items.find(mxObject => mxObject.id === event.item);
                     if (clickedItem) {
                         this.props.onItemClick(clickedItem).execute();
                     }
