@@ -14,10 +14,14 @@ export class ResourceScheduler extends Component {
     componentDidUpdate(prevProps) {
         // items datasource is loaded so we can create timeline items from it
         if (prevProps.groupData.status === "loading" && this.props.groupData.status === "available") {
-            this.updateGroups();
+            this.generateGroups();
         }
         if (prevProps.itemData.status === "loading" && this.props.itemData.status === "available") {
-            this.updateItems();
+            this.generateItems();
+        }
+
+        if (prevProps.itemData && prevProps.itemData !== this.props.itemData) {
+            this.generateItems();
         }
 
         // Check if all required fields are populated, then render the timeline
@@ -36,7 +40,7 @@ export class ResourceScheduler extends Component {
         return date;
     };
 
-    updateGroups = () => {
+    generateGroups = () => {
         const { groupData, groupId, groupContent } = this.props;
         const groupsArray = [];
         groupData.items.forEach(mxObject => {
@@ -54,7 +58,7 @@ export class ResourceScheduler extends Component {
         });
     };
 
-    updateItems = () => {
+    generateItems = () => {
         const { itemData, itemGroupId, itemStart, itemEnd, itemContent, itemTooltipText } = this.props;
         const itemsArray = [];
         itemData.items.forEach(mxObject => {
@@ -104,7 +108,8 @@ export class ResourceScheduler extends Component {
 
     onMove = (item, callback) => {
         console.log(item);
-        callback(item);
+        // Block the move, should be determined in Mendix if the data can change
+        callback(null);
     }
 
     render() {

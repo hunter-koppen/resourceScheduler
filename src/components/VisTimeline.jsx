@@ -10,6 +10,7 @@ export class VisTimeline extends Component {
     itemTemplateHandler = this.itemTemplate.bind(this);
     groupTemplateHandler = this.groupTemplate.bind(this);
     portalItems = [];
+    renderedItems = [];
     portalGroups = [];
     amountOfItems = null;
     startOfDay = new Date(2023, 8, 14, 0, 0, 0, 0);
@@ -28,8 +29,7 @@ export class VisTimeline extends Component {
                 this.timeline.setGroups(groupData);
             }
             if (prevProps.itemData !== itemData) {
-                this.amountOfItems = itemData.length;
-                this.timeline.setItems(itemData);
+                this.updateItems();
             }
 
             // Check if any options changed
@@ -164,7 +164,7 @@ export class VisTimeline extends Component {
         }
 
         // Check if the item is already in the portalItems list
-        const itemExists = this.portalItems.some(entry => entry.item === item);
+        const itemExists = this.portalItems.some(entry => entry.item.id === item.id);
         if (!itemExists) {
             this.portalItems.push({ item, element });
         }
@@ -190,23 +190,44 @@ export class VisTimeline extends Component {
     }
 
     renderPortalItems() {
-        return this.portalItems.map((portalItem, index) => {
-            const { item, element } = portalItem;
-            return createPortal(item.content, element, item.id);
-        });
+        if (this.portalItems) {
+            return this.portalItems.map((portalItem, index) => {
+                const { item, element } = portalItem;
+                return createPortal(item.content, element, item.id);
+            });
+        }
     }
 
     renderPortalGroups() {
-        return this.portalGroups.map((portalGroup, index) => {
-            const { group, element } = portalGroup;
-            return createPortal(group.content, element, group.id);
-        });
+        if (this.portalGroups) {
+            return this.portalGroups.map((portalGroup, index) => {
+                const { group, element } = portalGroup;
+                return createPortal(group.content, element, group.id);
+            });
+        }
     }
 
     redraw = () => {
         if (this.timeline) {
             this.timeline.redraw();
         }
+    };
+
+    updateItems = () => {
+        const { itemData } = this.props;
+        const timelineItems = this.timeline.itemsData;
+
+        // First set the amount of items we expect from Mendix so we know when to render the nodes
+        this.amountOfItems = itemData.length;
+
+        // Then check if we need to remove old items that dont exist in the latest Mx data
+        const toRemove = timelineItems.get({
+            filter: item => !itemData.find(i => i.id === item.id)
+        });
+        timelineItems.remove(toRemove);
+
+        // Run the update function based on the latest Mx data
+        timelineItems.update(itemData);
     };
 
     onRangeChanged = view => {
