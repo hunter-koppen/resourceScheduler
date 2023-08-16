@@ -110,7 +110,21 @@ export class ResourceScheduler extends Component {
         console.log(item);
         // Block the move, should be determined in Mendix if the data can change
         callback(null);
-    }
+    };
+
+    onRangeChanged = (start, end) => {
+        if (
+            this.props.timelineStart &&
+            this.props.timelineEnd &&
+            (this.props.timelineStart.value !== start || this.props.timelineEnd.value !== end)
+        ) {
+            this.props.timelineStart.setValue(start);
+            this.props.timelineEnd.setValue(end);
+            if (this.props.onRangeChanged && this.props.onRangeChanged.canExecute) {
+                this.props.onRangeChanged.execute();
+            }
+        }
+    };
 
     render() {
         if (this.state.initialize) {
@@ -128,6 +142,7 @@ export class ResourceScheduler extends Component {
                     mouseDown={this.mouseDown}
                     mouseMove={this.mouseMove}
                     onMove={this.onMove}
+                    onRangeChanged={this.onRangeChanged}
                 />
             );
         } else {

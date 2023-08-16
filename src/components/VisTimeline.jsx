@@ -27,7 +27,7 @@ export class VisTimeline extends Component {
         if (this.timeline) {
             const { groupData, itemData, dayStart, dayEnd, hideWeekends, timelineStart, timelineEnd } = this.props;
             if (prevProps.groupData !== groupData) {
-                this.updateGroups();
+                this.timeline.setGroups(groupData);
             }
             if (prevProps.itemData !== itemData) {
                 this.updateItems();
@@ -67,12 +67,14 @@ export class VisTimeline extends Component {
 
             // Check if the timeline view range has changed
             if (
-                prevProps.timelineStart.getTime() !== timelineStart.getTime() ||
-                prevProps.timelineEnd.getTime() !== timelineEnd.getTime()
+                prevProps.timelineStart?.getTime() !== timelineStart?.getTime() ||
+                prevProps.timelineEnd?.getTime() !== timelineEnd?.getTime()
             ) {
-                this.rangeStart = timelineStart;
-                this.rangeEnd = timelineStart;
-                this.timeline.setWindow(timelineStart, timelineEnd);
+                if (this.rangeStart.getTime() !== timelineStart.getTime() || this.rangeEnd.getTime() !== timelineEnd.getTime()) {
+                    this.rangeStart = timelineStart;
+                    this.rangeEnd = timelineEnd;
+                    this.timeline.setWindow(timelineStart, timelineEnd);
+                }
             }
         }
     }
@@ -225,7 +227,7 @@ export class VisTimeline extends Component {
         if (this.rangeStart?.getTime() !== view.start.getTime() || this.rangeEnd?.getTime() !== view.end.getTime()) {
             this.rangeStart = view.start;
             this.rangeEnd = view.end;
-            //this.props.onRangeChanged(view.start, view.end); event for ranged changed later
+            this.props.onRangeChanged(view.start, view.end);
         }
     };
 
