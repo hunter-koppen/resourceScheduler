@@ -83,17 +83,30 @@ export class ResourceScheduler extends Component {
     };
 
     mouseUp = event => {
-        if (event && !event.item && !this.dragging) {
+        if (event && !this.dragging) {
             console.log(event);
-            if (this.props.eventStartTime && event.snappedTime) {
-                const timestamp = Date.parse(event.snappedTime);
-                this.props.eventStartTime.setValue(new Date(timestamp));
+
+            // Handle click on the timeline itself
+            if (!event.item) {
+                if (this.props.eventStartTime && event.snappedTime) {
+                    const timestamp = Date.parse(event.snappedTime);
+                    this.props.eventStartTime.setValue(new Date(timestamp));
+                }
+                if (this.props.eventGroupId && event.group) {
+                    this.props.eventGroupId.setValue(event.group);
+                }
+                if (this.props.onTimelineClick && this.props.onTimelineClick.canExecute) {
+                    this.props.onTimelineClick.execute();
+                }
             }
-            if (this.props.eventGroupId && event.group) {
-                this.props.eventGroupId.setValue(event.group);
-            }
-            if (this.props.onClick && this.props.onClick.canExecute) {
-                this.props.onClick.execute();
+            // Handle click on item
+            else {
+                if (this.props.onItemClick) {
+                    const clickedItem = this.props.itemData.items.find(mxObject => mxObject.id === event.item.id);
+                    if (clickedItem) {
+                        this.props.onItemClick(clickedItem).execute();
+                    }
+                }
             }
         }
     };

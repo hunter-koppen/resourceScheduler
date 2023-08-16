@@ -135,20 +135,24 @@
                     </attributeTypes>
                 </property>
             </propertyGroup>
+            <propertyGroup caption="Items">
+                <property key="onDrag" type="action" required="false" dataSource="itemData">
+                    <caption>On drag</caption>
+                    <description>Action to call when dragging items on the timeline.</description>
+                </property>
+                <property key="onItemClick" type="action" required="false" dataSource="itemData">
+                    <caption>On click</caption>
+                    <description>Action to call when clicking on an item.</description>
+                </property>
+            </propertyGroup>
             <propertyGroup caption="Timeline">
-                <property key="onClick" type="action" required="false">
+                <property key="onTimelineClick" type="action" required="false">
                     <caption>On timeline click</caption>
                     <description>Action to call when clicking somewhere on the timeline that is not an item, you can use this to create new items.</description>
                 </property>
                 <property key="onRangeChanged" type="action" required="false">
                     <caption>On range change</caption>
                     <description>Action to call when the start and end date of the timeline view has changed, you can use this to retrieve new data.</description>
-                </property>
-            </propertyGroup>
-            <propertyGroup caption="Items">
-                <property key="onDrag" type="action" required="false" dataSource="itemData">
-                    <caption>On drag</caption>
-                    <description>Action to call when dragging items on the timeline.</description>
                 </property>
             </propertyGroup>
         </propertyGroup>
