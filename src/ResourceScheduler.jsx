@@ -4,7 +4,6 @@ import { VisTimeline } from "./components/VisTimeline";
 import "./ui/ResourceScheduler.css";
 
 export class ResourceScheduler extends Component {
-    clicking = false;
     dragging = false;
     state = {
         initialize: false,
@@ -93,12 +92,9 @@ export class ResourceScheduler extends Component {
                 this.props.onClick.execute();
             }
         }
-        this.clicking = false;
-        this.dragging = false;
     };
 
     mouseDown = () => {
-        this.clicking = true;
         this.dragging = false;
     };
 
