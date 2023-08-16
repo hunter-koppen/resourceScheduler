@@ -85,12 +85,12 @@ export class ResourceScheduler extends Component {
     mouseUp = event => {
         if (event && !event.item && !this.dragging) {
             console.log(event);
-            if (this.props.clickedDateTime && event.snappedTime) {
+            if (this.props.eventStartTime && event.snappedTime) {
                 const timestamp = Date.parse(event.snappedTime);
-                this.props.clickedDateTime.setValue(new Date(timestamp));
+                this.props.eventStartTime.setValue(new Date(timestamp));
             }
-            if (this.props.clickedGroupId && event.group) {
-                this.props.clickedGroupId.setValue(event.group);
+            if (this.props.eventGroupId && event.group) {
+                this.props.eventGroupId.setValue(event.group);
             }
             if (this.props.onClick && this.props.onClick.canExecute) {
                 this.props.onClick.execute();
@@ -107,7 +107,21 @@ export class ResourceScheduler extends Component {
     };
 
     onMove = (item, callback) => {
-        console.log(item);
+        if (this.props.eventStartTime) {
+            this.props.eventStartTime.setValue(item.start);
+        }
+        if (this.props.eventEndTime) {
+            this.props.eventEndTime.setValue(item.end);
+        }
+        if (this.props.eventGroupId) {
+            this.props.eventGroupId.setValue(item.group);
+        }
+        if (this.props.onDrag) {
+            const draggedItem = this.props.itemData.items.find(mxObject => mxObject.id === item.id);
+            if (draggedItem) {
+                this.props.onDrag(draggedItem).execute();
+            }
+        }
         // Block the move, should be determined in Mendix if the data can change
         callback(null);
     };

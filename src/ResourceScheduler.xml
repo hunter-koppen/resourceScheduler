@@ -113,25 +113,42 @@
         </propertyGroup>
         <propertyGroup caption="Events">
             <propertyGroup caption="Data">
-                <property key="clickedDateTime" type="attribute" required="false">
-                    <caption>Clicked Time Attribute</caption>
-                    <description>Attribute that will contain the datetime of where you clicked on the timeline</description>
+                <property key="eventStartTime" type="attribute" required="false">
+                    <caption>Event StartTime Attribute</caption>
+                    <description>Attribute that will contain the start datetime of a timeline event (see readme)</description>
                     <attributeTypes>
                         <attributeType name="DateTime" />
                     </attributeTypes>
                 </property>
-                <property key="clickedGroupId" type="attribute" required="false">
-                    <caption>Clicked Group</caption>
-                    <description>Attribute that will contain the group id</description>
+                <property key="eventEndTime" type="attribute" required="false">
+                    <caption>Event EndTime Attribute</caption>
+                    <description>Attribute that will contain the end datetime of a timeline event (see readme)</description>
+                    <attributeTypes>
+                        <attributeType name="DateTime" />
+                    </attributeTypes>
+                </property>
+                <property key="eventGroupId" type="attribute" required="false">
+                    <caption>Event Group ID</caption>
+                    <description>Attribute that will contain the group id of a timeline event (see readme)</description>
                     <attributeTypes>
                         <attributeType name="String" />
                     </attributeTypes>
                 </property>
             </propertyGroup>
-            <propertyGroup caption="Click">
+            <propertyGroup caption="Timeline">
                 <property key="onClick" type="action" required="false">
                     <caption>On timeline click</caption>
                     <description>Action to call when clicking somewhere on the timeline that is not an item, you can use this to create new items.</description>
+                </property>
+                <property key="onRangeChanged" type="action" required="false">
+                    <caption>On range change</caption>
+                    <description>Action to call when the start and end date of the timeline view has changed, you can use this to retrieve new data.</description>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Items">
+                <property key="onDrag" type="action" required="false" dataSource="itemData">
+                    <caption>On drag</caption>
+                    <description>Action to call when dragging items on the timeline.</description>
                 </property>
             </propertyGroup>
         </propertyGroup>
