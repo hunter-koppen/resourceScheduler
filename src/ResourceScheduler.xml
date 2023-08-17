@@ -95,6 +95,13 @@
                         <attributeType name="String" />
                     </attributeTypes>
                 </property>
+                <property key="parentGroupId" type="attribute" required="false" dataSource="groupData">
+                    <caption>Parent Group ID</caption>
+                    <description>If set the group will be nested inside the parent group</description>
+                    <attributeTypes>
+                        <attributeType name="String" />
+                    </attributeTypes>
+                </property>
             </propertyGroup>
             <propertyGroup caption="Settings">
                 <property key="groupHeightMode" type="enumeration" defaultValue="fitItems">

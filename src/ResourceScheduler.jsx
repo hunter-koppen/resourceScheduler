@@ -51,10 +51,14 @@ export class ResourceScheduler extends Component {
             const id = groupId.get(mxObject).value;
             const content = groupContent.get(mxObject);
             const order = groupSort.get(mxObject).value;
+            const nestedGroups = this.props.groupData.items
+                .filter(mxObject => this.props.parentGroupId?.get(mxObject).value === id)
+                .map(mxObject => groupId.get(mxObject).value);
             const groupObj = {
                 id,
                 content,
-                order
+                order,
+                nestedGroups: nestedGroups.length > 0 ? nestedGroups : null
             };
             groupsArray.push(groupObj);
         });
@@ -115,7 +119,9 @@ export class ResourceScheduler extends Component {
             // Handle click of group
             else if (event.what === "group-label") {
                 if (this.props.onGroupClick) {
-                    const clickedGroup = this.props.groupData.items.find(mxObject => this.props.groupId.get(mxObject).value === event.group);
+                    const clickedGroup = this.props.groupData.items.find(
+                        mxObject => this.props.groupId.get(mxObject).value === event.group
+                    );
                     if (clickedGroup) {
                         this.props.onGroupClick.get(clickedGroup).execute();
                     }
