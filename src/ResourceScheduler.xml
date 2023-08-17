@@ -61,6 +61,14 @@
                         <enumerationValue key="altKey">Alt</enumerationValue>
                     </enumerationValues>
                 </property>
+                <property key="customLoader" type="boolean" required="true" defaultValue="false">
+                    <caption>Loader?</caption>
+                    <description>Show some content while the timeline is loading.</description>
+                </property>
+                <property key="loadingContent" type="widgets" required="false">
+                    <caption>Loading timeline, content here will be shown while the timeline is loading.</caption>
+                    <description>The content to show while loading the timeline</description>
+                </property>
             </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Groups">

@@ -160,8 +160,10 @@ export class VisTimeline extends Component {
                     end: this.endOfDay,
                     repeat: "daily"
                 }
-            ]
-            //loadingScreenTemplate: () => { return "<h4>Loading...</h4>"; }
+            ],
+            loadingScreenTemplate: () => {
+                return "";
+            }
         };
 
         if (this.props.hideWeekends) {
@@ -270,6 +272,15 @@ export class VisTimeline extends Component {
         }
     }
 
+    renderLoader() {
+        if (this.ref.current) {
+            const timelineloader = this.ref.current.querySelector(".vis-loading-screen");
+            if (timelineloader) {
+                return createPortal(this.props.loadingContent, timelineloader, 1);
+            }
+        }
+    }
+
     redraw = () => {
         // temporary test function
         if (this.timeline) {
@@ -280,6 +291,7 @@ export class VisTimeline extends Component {
     render() {
         return (
             <div ref={this.ref} className="resource-scheduler">
+                {this.renderLoader()}
                 {this.renderGroups()}
                 {this.renderItems()}
                 <button onClick={this.redraw}>redraw test</button>
