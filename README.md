@@ -14,7 +14,6 @@
 [link to GitHub issues]
 
 ## To do
-- Redraw on added content
 - Mx content for loading timeline
 - Click event for groups
 - Functionality for dragging item to other group

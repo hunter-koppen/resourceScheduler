@@ -131,6 +131,7 @@ export class VisTimeline extends Component {
                 item: "bottom"
             },
             type: "range",
+            maxHeight: this.props.maxHeight,
             stack: false,
             moveable: this.props.moveable,
             zoomKey:
@@ -159,10 +160,8 @@ export class VisTimeline extends Component {
                     end: this.endOfDay,
                     repeat: "daily"
                 }
-            ],
-            loadingScreenTemplate: () => {
-                return "<h4>Loading...</h4>";
-            }
+            ]
+            //loadingScreenTemplate: () => { return "<h4>Loading...</h4>"; }
         };
 
         if (this.props.hideWeekends) {

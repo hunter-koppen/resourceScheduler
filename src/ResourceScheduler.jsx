@@ -173,6 +173,7 @@ export class ResourceScheduler extends Component {
                     onRangeChanged={this.onRangeChanged}
                     zoomSetting={this.props.zoomSetting}
                     moveable={this.props.timelineMovable}
+                    maxHeight={this.props.timelineMaxHeight?.value}
                 />
             );
         } else {

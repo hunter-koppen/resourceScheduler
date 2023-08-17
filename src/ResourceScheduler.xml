@@ -41,6 +41,11 @@
                 </property>
             </propertyGroup>
             <propertyGroup caption="Settings">
+                <property key="timelineMaxHeight" type="expression" required="false">
+                    <caption>Max height</caption>
+                    <description>The max height of the timeline (can use any unit).</description>
+                    <returnType type="String" />
+                </property>
                 <property key="timelineMovable" type="boolean" required="true" defaultValue="true">
                     <caption>Movable?</caption>
                     <description>Specifies whether the Timeline can be moved and zoomed by dragging the window.</description>
@@ -65,7 +70,7 @@
                     <description>Return the list of groups you wish to show in the scheduler</description>
                 </property>
                 <property key="groupContent" type="widgets" required="false" dataSource="groupData">
-                    <caption>Content</caption>
+                    <caption>Group content, place widgets here</caption>
                     <description>The content to render inside a group</description>
                 </property>
                 <property key="groupId" type="attribute" required="true" dataSource="groupData">
@@ -95,7 +100,7 @@
                     <description>Return the list of items you wish to show in the scheduler</description>
                 </property>
                 <property key="itemContent" type="widgets" required="false" dataSource="itemData">
-                    <caption>Content</caption>
+                    <caption>Item content, place widgets here</caption>
                     <description>The content to render inside an Item</description>
                 </property>
                 <property key="itemStart" type="attribute" required="true" dataSource="itemData">
