@@ -1,9 +1,8 @@
 import { Component, createElement, createRef } from "react";
+import { createPortal } from "react-dom";
 
 import { Timeline, DataSet } from "vis-timeline/standalone";
 import "../../node_modules/vis-timeline/dist/vis-timeline-graph2d.min.css";
-
-import { renderItems, renderGroups } from "../utils/Utils";
 
 export class VisTimeline extends Component {
     ref = createRef();
@@ -11,19 +10,22 @@ export class VisTimeline extends Component {
     itemTemplateHandler = this.itemTemplate.bind(this);
     groupTemplateHandler = this.groupTemplate.bind(this);
     portalItems = [];
-    renderedItems = [];
     portalGroups = [];
     amountOfItems = null;
     startOfDay = new Date(2023, 8, 14, 0, 0, 0, 0);
     endOfDay = new Date(2023, 8, 15, 0, 0, 0, 0);
     rangeStart = null;
     rangeEnd = null;
+    portalCounter = 0;
+    state = {
+        amountOfPortals: 0
+    };
 
     componentDidMount() {
         this.initialize();
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps, prevState) {
         if (this.timeline) {
             const { groupData, itemData, dayStart, dayEnd, hideWeekends, timelineStart, timelineEnd } = this.props;
             if (prevProps.groupData !== groupData) {
@@ -78,6 +80,14 @@ export class VisTimeline extends Component {
                     this.rangeEnd = timelineEnd;
                     this.timeline.setWindow(timelineStart, timelineEnd);
                 }
+            }
+
+            // Check if the rendered portals have changed
+            if (
+                prevState.amountOfPortals !== this.state.amountOfPortals &&
+                this.state.amountOfPortals === this.amountOfItems
+            ) {
+                this.timeline.redraw();
             }
         }
     }
@@ -240,6 +250,27 @@ export class VisTimeline extends Component {
         }
     };
 
+    renderItems() {
+        if (this.portalItems) {
+            return this.portalItems.map(obj => {
+                const { item, element } = obj;
+                if (!element.innerHTML && this.state.amountOfPortals <= this.amountOfItems) {
+                    this.setState({ amountOfPortals: (this.portalCounter += 1) });
+                }
+                return createPortal(item.content, element, item.id);
+            });
+        }
+    }
+
+    renderGroups() {
+        if (this.portalGroups) {
+            return this.portalGroups.map(obj => {
+                const { group, element } = obj;
+                return createPortal(group.content, element, group.id);
+            });
+        }
+    }
+
     redraw = () => {
         // temporary test function
         if (this.timeline) {
@@ -250,8 +281,8 @@ export class VisTimeline extends Component {
     render() {
         return (
             <div ref={this.ref} className="resource-scheduler">
-                {renderGroups(this.portalGroups)}
-                {renderItems(this.portalItems)}
+                {this.renderGroups()}
+                {this.renderItems()}
                 <button onClick={this.redraw}>redraw test</button>
             </div>
         );

@@ -18,8 +18,6 @@
 - Mx content for loading timeline
 - Click event for groups
 - Functionality for dragging item to other group
-- Setting for allowing scroll
-- Zoom settings
 - Update group data fix
 
 Later:
