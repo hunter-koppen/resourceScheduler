@@ -117,7 +117,7 @@ export class VisTimeline extends Component {
             editable: {
                 add: false, // If true, new items can be created by double tapping an empty space in the Timeline. See section Editing Items for a detailed explanation.
                 updateTime: this.props.allowDragging, // If true, items can be dragged to another moment in time. See section Editing Items for a detailed explanation.
-                updateGroup: false, // If true, items can be dragged from one group to another. Only applicable when the Timeline has groups. See section Editing Items for a detailed explanation.
+                updateGroup: this.props.allowDraggingOtherGroup, // If true, items can be dragged from one group to another. Only applicable when the Timeline has groups. See section Editing Items for a detailed explanation.
                 remove: false, // If true, items can be deleted by first selecting them, and then clicking the delete button on the top right of the item. See section Editing Items for a detailed explanation.
                 overrideItems: false // If true, item specific editable properties are overridden by timeline settings
             },

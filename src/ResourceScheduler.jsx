@@ -166,6 +166,7 @@ export class ResourceScheduler extends Component {
                     groupData={this.state.groupData}
                     groupHeightMode={this.props.groupHeightMode}
                     allowDragging={this.props.allowDragging}
+                    allowDraggingOtherGroup={this.props.allowDraggingOtherGroup}
                     mouseUp={this.mouseUp}
                     mouseDown={this.mouseDown}
                     mouseMove={this.mouseMove}
