@@ -1,5 +1,5 @@
 import { Component, createElement, createRef } from "react";
-import { createPortal } from "react-dom";
+import { createPortal, render } from "react-dom";
 
 import { Timeline, DataSet } from "vis-timeline/standalone";
 import "../../node_modules/vis-timeline/dist/vis-timeline-graph2d.min.css";
@@ -12,13 +12,18 @@ export class VisTimeline extends Component {
     portalItems = [];
     portalGroups = [];
     amountOfItems = null;
+    amountOfGroups = null;
+    portalItemCounter = 0;
+    portalGroupCounter = 0;
     startOfDay = new Date(2023, 8, 14, 0, 0, 0, 0);
     endOfDay = new Date(2023, 8, 15, 0, 0, 0, 0);
     rangeStart = null;
     rangeEnd = null;
-    portalCounter = 0;
+    items = null;
+    groups = null;
     state = {
-        amountOfPortals: 0
+        amountOfItemPortals: 0,
+        amountOfGroupPortals: 0
     };
 
     componentDidMount() {
@@ -28,11 +33,13 @@ export class VisTimeline extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (this.timeline) {
             const { groupData, itemData, dayStart, dayEnd, hideWeekends, timelineStart, timelineEnd } = this.props;
-            if (prevProps.groupData !== groupData) {
-                this.timeline.setGroups(groupData);
-            }
+
+            // Check if the datasource has changed
             if (prevProps.itemData !== itemData) {
                 this.updateItems();
+            }
+            if (prevProps.groupData !== groupData) {
+                this.updateGroups();
             }
 
             // Check if any options changed
@@ -84,8 +91,10 @@ export class VisTimeline extends Component {
 
             // Check if the rendered portals have changed
             if (
-                prevState.amountOfPortals !== this.state.amountOfPortals &&
-                this.state.amountOfPortals === this.amountOfItems
+                (prevState.amountOfItemPortals !== this.state.amountOfItemPortals &&
+                    this.state.amountOfItemPortals === this.amountOfItems) ||
+                (prevState.amountOfGroupPortals !== this.state.amountOfGroupPortals &&
+                    this.state.amountOfGroupPortals === this.amountOfGroups)
             ) {
                 this.timeline.redraw();
             }
@@ -100,7 +109,11 @@ export class VisTimeline extends Component {
 
     initialize = () => {
         this.amountOfItems = this.props.itemData.length;
-        this.timeline = new Timeline(this.ref.current, this.props.itemData, this.props.groupData, this.getOptions());
+        this.amountOfGroups = this.props.groupData.length;
+        this.items = new DataSet(this.props.itemData);
+        this.groups = new DataSet(this.props.groupData);
+
+        this.timeline = new Timeline(this.ref.current, this.items, this.groups, this.getOptions());
 
         this.timeline.on("rangechanged", this.onRangeChanged);
         this.timeline.on("mouseDown", this.props.mouseDown);
@@ -131,13 +144,11 @@ export class VisTimeline extends Component {
                 item: "bottom"
             },
             type: "range",
-            maxHeight: this.props.maxHeight,
+            maxHeight: this.props.maxHeight ? this.props.maxHeight : "",
             stack: false,
             moveable: this.props.moveable,
             zoomKey:
-                this.props.zoomSetting === "scroll" || this.props.zoomSetting === "none"
-                    ? undefined
-                    : this.props.zoomSetting,
+                this.props.zoomSetting === "scroll" || this.props.zoomSetting === "none" ? "" : this.props.zoomSetting,
             zoomable: this.props.zoomSetting !== "none",
             start: this.props.timelineStart,
             end: this.props.timelineEnd,
@@ -204,43 +215,51 @@ export class VisTimeline extends Component {
             return "";
         }
 
-        // Check if the item is already in the portalItems list
-        const groupExists = this.portalGroups.some(entry => entry.group === group);
+        // Check if the group is already in the portalGroups list
+        const groupExists = this.portalGroups.some(entry => entry.group.id === group.id);
         if (!groupExists) {
             this.portalGroups.push({ group, element });
         }
-        return "";
+
+        // Check if all the groups have been rendered in the dom so we can render all reactnodes.
+        if (this.amountOfGroups === this.portalGroups.length) {
+            this.forceUpdate();
+        }
+
+        // return react div here, for some reason that makes it work... DO NOT REMOVE
+        return <div></div>;
     }
 
     updateItems = () => {
         const { itemData } = this.props;
-        const timelineItems = this.timeline.itemsData;
 
         // First set the amount of items we expect from Mendix so we know when to render the nodes
         this.amountOfItems = itemData.length;
 
         // Then check if we need to remove old items that dont exist in the latest Mx data
-        const toRemove = timelineItems.get({
+        const toRemove = this.items.get({
             filter: item => !itemData.find(i => i.id === item.id)
         });
-        timelineItems.remove(toRemove);
+        this.items.remove(toRemove);
 
         // Run the update function based on the latest Mx data
-        timelineItems.update(itemData);
+        this.items.update(itemData);
     };
 
     updateGroups = () => {
         const { groupData } = this.props;
-        const timelineGroups = this.timeline.groupsData;
+
+        // First set the amount of groups we expect from Mendix so we know when to render the nodes
+        this.amountOfGroups = groupData.length;
 
         // Check if we need to remove old items that dont exist in the latest Mx data
-        const toRemove = timelineGroups.get({
+        const toRemove = this.groups.get({
             filter: group => !groupData.find(g => g.id === group.id)
         });
-        timelineGroups.remove(toRemove);
+        this.groups.remove(toRemove);
 
         // Run the update function based on the latest Mx data
-        timelineGroups.update(groupData);
+        this.groups.update(groupData);
     };
 
     onRangeChanged = view => {
@@ -255,8 +274,8 @@ export class VisTimeline extends Component {
         if (this.portalItems) {
             return this.portalItems.map(obj => {
                 const { item, element } = obj;
-                if (!element.innerHTML && this.state.amountOfPortals <= this.amountOfItems) {
-                    this.setState({ amountOfPortals: (this.portalCounter += 1) });
+                if (!element.innerHTML && this.state.amountOfItemPortals <= this.amountOfItems) {
+                    this.setState({ amountOfItemPortals: (this.portalItemCounter += 1) });
                 }
                 return createPortal(item.content, element, item.id);
             });
@@ -267,6 +286,9 @@ export class VisTimeline extends Component {
         if (this.portalGroups) {
             return this.portalGroups.map(obj => {
                 const { group, element } = obj;
+                if (!element.innerHTML && this.state.amountOfGroupPortals <= this.amountOfGroups) {
+                    this.setState({ amountOfGroupPortals: (this.portalGroupCounter += 1) });
+                }
                 return createPortal(group.content, element, group.id);
             });
         }
