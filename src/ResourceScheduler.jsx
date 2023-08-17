@@ -45,15 +45,16 @@ export class ResourceScheduler extends Component {
     };
 
     generateGroups = () => {
-        const { groupData, groupId, groupContent } = this.props;
+        const { groupData, groupId, groupContent, groupSort } = this.props;
         const groupsArray = [];
         groupData.items.forEach(mxObject => {
             const id = groupId.get(mxObject).value;
             const content = groupContent.get(mxObject);
+            const order = groupSort.get(mxObject).value;
             const groupObj = {
                 id,
                 content,
-                order: 1
+                order
             };
             groupsArray.push(groupObj);
         });
@@ -89,7 +90,6 @@ export class ResourceScheduler extends Component {
     mouseUp = event => {
         if (event && !this.dragging) {
             console.log(event);
-
             // Handle click on the timeline itself
             if (!event.item && event.what !== "group-label") {
                 if (this.props.eventStartTime && event.snappedTime) {
@@ -109,6 +109,15 @@ export class ResourceScheduler extends Component {
                     const clickedItem = this.props.itemData.items.find(mxObject => mxObject.id === event.item);
                     if (clickedItem) {
                         this.props.onItemClick.get(clickedItem).execute();
+                    }
+                }
+            }
+            // Handle click of group
+            else if (event.what === "group-label") {
+                if (this.props.onGroupClick) {
+                    const clickedGroup = this.props.groupData.items.find(mxObject => this.props.groupId.get(mxObject).value === event.group);
+                    if (clickedGroup) {
+                        this.props.onGroupClick.get(clickedGroup).execute();
                     }
                 }
             }

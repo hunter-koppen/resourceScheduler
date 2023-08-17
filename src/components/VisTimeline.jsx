@@ -1,5 +1,5 @@
 import { Component, createElement, createRef } from "react";
-import { createPortal, render } from "react-dom";
+import { createPortal } from "react-dom";
 
 import { Timeline, DataSet } from "vis-timeline/standalone";
 import "../../node_modules/vis-timeline/dist/vis-timeline-graph2d.min.css";

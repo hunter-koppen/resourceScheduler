@@ -14,12 +14,11 @@
 [link to GitHub issues]
 
 ## To do
-- Click event for groups
-- Functionality for dragging item to other group
-- Update group data fix
+- Close/Open groups
+- Nested groups
+- Background items
 
 Later:
-- Nested groups
 - Better hovers
 - Limit start/end dates?
 - Time Axis & Step (so you can set it fixed)

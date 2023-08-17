@@ -43,7 +43,7 @@
             <propertyGroup caption="Settings">
                 <property key="timelineMaxHeight" type="expression" required="false">
                     <caption>Max height</caption>
-                    <description>The max height of the timeline (can use any unit).</description>
+                    <description>The max height of the timeline, can use any unit (Optional).</description>
                     <returnType type="String" />
                 </property>
                 <property key="timelineMovable" type="boolean" required="true" defaultValue="true">
@@ -84,6 +84,13 @@
                 <property key="groupId" type="attribute" required="true" dataSource="groupData">
                     <caption>Group ID</caption>
                     <description />
+                    <attributeTypes>
+                        <attributeType name="String" />
+                    </attributeTypes>
+                </property>
+                <property key="groupSort" type="attribute" required="false" dataSource="groupData">
+                    <caption>Group sort</caption>
+                    <description>The attribute that will be sorted on</description>
                     <attributeTypes>
                         <attributeType name="String" />
                     </attributeTypes>
@@ -175,16 +182,6 @@
                     </attributeTypes>
                 </property>
             </propertyGroup>
-            <propertyGroup caption="Items">
-                <property key="onDrag" type="action" required="false" dataSource="itemData">
-                    <caption>On drag</caption>
-                    <description>Action to call when dragging items on the timeline.</description>
-                </property>
-                <property key="onItemClick" type="action" required="false" dataSource="itemData">
-                    <caption>On click</caption>
-                    <description>Action to call when clicking on an item.</description>
-                </property>
-            </propertyGroup>
             <propertyGroup caption="Timeline">
                 <property key="onTimelineClick" type="action" required="false">
                     <caption>On timeline click</caption>
@@ -193,6 +190,22 @@
                 <property key="onRangeChanged" type="action" required="false">
                     <caption>On range change</caption>
                     <description>Action to call when the start and end date of the timeline view has changed, you can use this to retrieve new data.</description>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Groups">
+                <property key="onGroupClick" type="action" required="false" dataSource="groupData">
+                    <caption>On group click</caption>
+                    <description>Action to call when clicking on a group.</description>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Items">
+                <property key="onDrag" type="action" required="false" dataSource="itemData">
+                    <caption>On drag</caption>
+                    <description>Action to call when dragging items on the timeline.</description>
+                </property>
+                <property key="onItemClick" type="action" required="false" dataSource="itemData">
+                    <caption>On item click</caption>
+                    <description>Action to call when clicking on an item.</description>
                 </property>
             </propertyGroup>
         </propertyGroup>
