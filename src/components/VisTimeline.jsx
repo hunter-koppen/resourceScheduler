@@ -70,7 +70,10 @@ export class VisTimeline extends Component {
                 prevProps.timelineStart?.getTime() !== timelineStart?.getTime() ||
                 prevProps.timelineEnd?.getTime() !== timelineEnd?.getTime()
             ) {
-                if (this.rangeStart.getTime() !== timelineStart.getTime() || this.rangeEnd.getTime() !== timelineEnd.getTime()) {
+                if (
+                    this.rangeStart.getTime() !== timelineStart.getTime() ||
+                    this.rangeEnd.getTime() !== timelineEnd.getTime()
+                ) {
                     this.rangeStart = timelineStart;
                     this.rangeEnd = timelineEnd;
                     this.timeline.setWindow(timelineStart, timelineEnd);
@@ -103,10 +106,10 @@ export class VisTimeline extends Component {
             locale: mx.session.sessionData.locale.code,
             editable: {
                 add: false, // If true, new items can be created by double tapping an empty space in the Timeline. See section Editing Items for a detailed explanation.
-                updateTime: true, // If true, items can be dragged to another moment in time. See section Editing Items for a detailed explanation.
+                updateTime: this.props.allowDragging, // If true, items can be dragged to another moment in time. See section Editing Items for a detailed explanation.
                 updateGroup: false, // If true, items can be dragged from one group to another. Only applicable when the Timeline has groups. See section Editing Items for a detailed explanation.
                 remove: false, // If true, items can be deleted by first selecting them, and then clicking the delete button on the top right of the item. See section Editing Items for a detailed explanation.
-                overrideItems: true // If true, item specific editable properties are overridden by timeline settings
+                overrideItems: false // If true, item specific editable properties are overridden by timeline settings
             },
             tooltip: {
                 delay: 100
@@ -119,6 +122,12 @@ export class VisTimeline extends Component {
             },
             type: "range",
             stack: false,
+            moveable: this.props.moveable,
+            zoomKey:
+                this.props.zoomSetting === "scroll" || this.props.zoomSetting === "none"
+                    ? undefined
+                    : this.props.zoomSetting,
+            zoomable: this.props.zoomSetting !== "none",
             start: this.props.timelineStart,
             end: this.props.timelineEnd,
             onMove: this.props.onMove,

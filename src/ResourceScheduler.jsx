@@ -104,7 +104,7 @@ export class ResourceScheduler extends Component {
                 if (this.props.onItemClick) {
                     const clickedItem = this.props.itemData.items.find(mxObject => mxObject.id === event.item);
                     if (clickedItem) {
-                        this.props.onItemClick(clickedItem).execute();
+                        this.props.onItemClick.get(clickedItem).execute();
                     }
                 }
             }
@@ -132,7 +132,7 @@ export class ResourceScheduler extends Component {
         if (this.props.onDrag) {
             const draggedItem = this.props.itemData.items.find(mxObject => mxObject.id === item.id);
             if (draggedItem) {
-                this.props.onDrag(draggedItem).execute();
+                this.props.onDrag.get(draggedItem).execute();
             }
         }
         // Block the move, should be determined in Mendix if the data can change
@@ -165,11 +165,14 @@ export class ResourceScheduler extends Component {
                     itemData={this.state.itemData}
                     groupData={this.state.groupData}
                     groupHeightMode={this.props.groupHeightMode}
+                    allowDragging={this.props.allowDragging}
                     mouseUp={this.mouseUp}
                     mouseDown={this.mouseDown}
                     mouseMove={this.mouseMove}
                     onMove={this.onMove}
                     onRangeChanged={this.onRangeChanged}
+                    zoomSetting={this.props.zoomSetting}
+                    moveable={this.props.timelineMovable}
                 />
             );
         } else {

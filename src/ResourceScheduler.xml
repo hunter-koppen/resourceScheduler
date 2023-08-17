@@ -40,6 +40,23 @@
                     <returnType type="Boolean" />
                 </property>
             </propertyGroup>
+            <propertyGroup caption="Settings">
+                <property key="timelineMovable" type="boolean" required="true" defaultValue="true">
+                    <caption>Movable?</caption>
+                    <description>Specifies whether the Timeline can be moved and zoomed by dragging the window.</description>
+                </property>
+                <property key="zoomSetting" type="enumeration" defaultValue="none">
+                    <caption>Zooming</caption>
+                    <description>Allow zoom functionality for the timeline.</description>
+                    <enumerationValues>
+                        <enumerationValue key="none">None</enumerationValue>
+                        <enumerationValue key="scroll">Mouse scroll</enumerationValue>
+                        <enumerationValue key="shiftKey">Shift</enumerationValue>
+                        <enumerationValue key="ctrlKey">Ctrl</enumerationValue>
+                        <enumerationValue key="altKey">Alt</enumerationValue>
+                    </enumerationValues>
+                </property>
+            </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Groups">
             <propertyGroup caption="Datasource">
@@ -108,6 +125,12 @@
                     <attributeTypes>
                         <attributeType name="String" />
                     </attributeTypes>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Settings">
+                <property key="allowDragging" type="boolean" required="true" defaultValue="false">
+                    <caption>Allow dragging?</caption>
+                    <description>Allow items to be moved/stretched on the timeline?</description>
                 </property>
             </propertyGroup>
         </propertyGroup>

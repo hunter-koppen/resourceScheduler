@@ -1,6 +1,11 @@
 import { hidePropertyIn } from "@mendix/pluggable-widgets-tools";
 
 export function getProperties(values, defaultProperties, target) {
-    hidePropertyIn(defaultProperties, values, "groupsSelectable");
+    if (values.allowDragging === false) {
+        hidePropertyIn(defaultProperties, values, "onDrag");
+    }
+    if (values.timelineMovable === false) {
+        hidePropertyIn(defaultProperties, values, "zoomSetting");
+    }
     return defaultProperties;
 }
