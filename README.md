@@ -14,12 +14,13 @@
 [link to GitHub issues]
 
 ## To do
+- Redraw on added content
 - Mx content for loading timeline
 - Click event for groups
-- Setting of allow dragging
 - Functionality for dragging item to other group
 - Setting for allowing scroll
 - Zoom settings
+- Update group data fix
 
 Later:
 - Nested groups
