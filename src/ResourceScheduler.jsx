@@ -20,8 +20,12 @@ export class ResourceScheduler extends Component {
             this.generateItems();
         }
 
+        // Check if the datasource has changed
         if (prevProps.itemData && prevProps.itemData !== this.props.itemData) {
             this.generateItems();
+        }
+        if (prevProps.groupData && prevProps.groupData !== this.props.groupData) {
+            this.generateGroups();
         }
 
         // Check if all required fields are populated, then render the timeline
@@ -87,7 +91,7 @@ export class ResourceScheduler extends Component {
             console.log(event);
 
             // Handle click on the timeline itself
-            if (!event.item) {
+            if (!event.item && event.what !== "group-label") {
                 if (this.props.eventStartTime && event.snappedTime) {
                     const timestamp = Date.parse(event.snappedTime);
                     this.props.eventStartTime.setValue(new Date(timestamp));
@@ -100,7 +104,7 @@ export class ResourceScheduler extends Component {
                 }
             }
             // Handle click on item
-            else {
+            else if (event.item) {
                 if (this.props.onItemClick) {
                     const clickedItem = this.props.itemData.items.find(mxObject => mxObject.id === event.item);
                     if (clickedItem) {

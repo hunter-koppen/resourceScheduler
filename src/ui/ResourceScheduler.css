@@ -10,3 +10,6 @@
 .resource-scheduler .vis-item.vis-range .vis-item-content {
     display: block;
 }
+.resource-scheduler .vis-labelset .vis-label .vis-inner {
+    padding: 0;
+}
