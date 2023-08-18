@@ -19,6 +19,7 @@ export function getPreview(values, isDarkMode) {
     const titleHeader = {
         type: "RowLayout",
         columnSize: "grow",
+        backgroundColor: isDarkMode ? "#2A324C" : "#DCEEFE",
         borders: true,
         borderWidth: 1,
         children: [
@@ -28,6 +29,7 @@ export function getPreview(values, isDarkMode) {
                 children: [
                     {
                         type: "Text",
+                        fontColor: isDarkMode ? "#579BF9" : "#2D2FB8",
                         content: "Resource Scheduler"
                     }
                 ]
@@ -64,7 +66,7 @@ export function getPreview(values, isDarkMode) {
             {
                 type: "Container",
                 borders: true,
-                grow: 3,
+                grow: 2,
                 children: [
                     { type: "DropZone", property: values.itemContent, placeholder: "Item content, place widgets here" }
                 ]
