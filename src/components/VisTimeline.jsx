@@ -274,8 +274,11 @@ export class VisTimeline extends Component {
         if (this.portalItems) {
             return this.portalItems.map(obj => {
                 const { item, element } = obj;
-                if (!element.innerHTML && this.state.amountOfItemPortals <= this.amountOfItems) {
-                    this.setState({ amountOfItemPortals: (this.portalItemCounter += 1) });
+                if (!element.innerHTML && this.portalItemCounter <= this.amountOfItems) {
+                    this.portalItemCounter += 1;
+                    if (this.portalItemCounter === this.amountOfItems) {
+                        this.setState({ amountOfItemPortals: this.portalItemCounter });
+                    }
                 }
                 return createPortal(item.content, element, item.id);
             });
@@ -286,8 +289,10 @@ export class VisTimeline extends Component {
         if (this.portalGroups) {
             return this.portalGroups.map(obj => {
                 const { group, element } = obj;
-                if (!element.innerHTML && this.state.amountOfGroupPortals <= this.amountOfGroups) {
-                    this.setState({ amountOfGroupPortals: (this.portalGroupCounter += 1) });
+                if (!element.innerHTML && this.portalGroupCounter <= this.amountOfGroups) {
+                    if (this.portalGroupCounter === this.amountOfGroups) {
+                        this.setState({ amountOfGroupPortals: this.portalGroupCounter });
+                    }
                 }
                 return createPortal(group.content, element, group.id);
             });
