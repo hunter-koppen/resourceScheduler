@@ -22,3 +22,6 @@
 .resource-scheduler .vis-ltr .vis-label.vis-nested-group .vis-inner {
     padding-left: 0;
 }
+.resource-scheduler .vis-ltr .vis-label:not(.vis-nesting-group):not(.vis-group-level-0) {
+    padding-left: 0;
+}

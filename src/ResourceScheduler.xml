@@ -155,6 +155,10 @@
                 </property>
             </propertyGroup>
             <propertyGroup caption="Settings">
+                <property key="stack" type="boolean" required="true" defaultValue="true">
+                    <caption>Stack items?</caption>
+                    <description>Items will be stacked on top of each other such that they do not overlap.</description>
+                </property>
                 <property key="allowDragging" type="boolean" required="true" defaultValue="false">
                     <caption>Allow dragging?</caption>
                     <description>Allow items to be moved/stretched on the timeline?</description>

@@ -145,7 +145,7 @@ export class VisTimeline extends Component {
             },
             type: "range",
             maxHeight: this.props.maxHeight ? this.props.maxHeight : "",
-            stack: false,
+            stack: this.props.stack,
             moveable: this.props.moveable,
             zoomKey:
                 this.props.zoomSetting === "scroll" || this.props.zoomSetting === "none" ? "" : this.props.zoomSetting,
@@ -158,6 +158,12 @@ export class VisTimeline extends Component {
             horizontalScroll: false,
             template: this.itemTemplateHandler,
             groupTemplate: this.groupTemplateHandler,
+            margin: {
+                item: {
+                    horizontal : -1
+                },
+                axis: 5 // minimal margin between items and the axis
+            },
             hiddenDates: [
                 {
                     id: "dayStart",

@@ -195,6 +195,7 @@ export class ResourceScheduler extends Component {
                     moveable={this.props.timelineMovable}
                     maxHeight={this.props.timelineMaxHeight?.value}
                     loadingContent={this.props.loadingContent}
+                    stack={this.props.stack}
                 />
             );
         } else {
