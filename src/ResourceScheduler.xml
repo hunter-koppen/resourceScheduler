@@ -169,6 +169,39 @@
                 </property>
             </propertyGroup>
         </propertyGroup>
+        <propertyGroup caption="Background items">
+            <propertyGroup caption="Datasource">
+                <property key="backgroundData" type="datasource" required="false" isList="true">
+                    <caption>Background items</caption>
+                    <description>Return the list of background items you wish to show in the scheduler</description>
+                </property>
+                <property key="backgroundContent" type="widgets" required="false" dataSource="backgroundData">
+                    <caption>Background content, place widgets here</caption>
+                    <description>The content to render inside a background item</description>
+                </property>
+                <property key="backgroundStart" type="attribute" required="true" dataSource="backgroundData">
+                    <caption>StartTime</caption>
+                    <description />
+                    <attributeTypes>
+                        <attributeType name="DateTime" />
+                    </attributeTypes>
+                </property>
+                <property key="backgroundEnd" type="attribute" required="true" dataSource="backgroundData">
+                    <caption>EndTime</caption>
+                    <description />
+                    <attributeTypes>
+                        <attributeType name="DateTime" />
+                    </attributeTypes>
+                </property>
+                <property key="backgroundGroupId" type="attribute" required="true" dataSource="backgroundData">
+                    <caption>Group ID</caption>
+                    <description>Use an association to select the group Id</description>
+                    <attributeTypes>
+                        <attributeType name="String" />
+                    </attributeTypes>
+                </property>
+            </propertyGroup>
+        </propertyGroup>
         <propertyGroup caption="Events">
             <propertyGroup caption="Data">
                 <property key="eventStartTime" type="attribute" required="false">

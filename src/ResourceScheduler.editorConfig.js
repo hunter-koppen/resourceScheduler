@@ -73,6 +73,23 @@ export function getPreview(values, isDarkMode) {
             }
         ]
     };
+    const background = {
+        type: "RowLayout",
+        columnSize: "fixed",
+        children: [
+            {
+                type: "Container",
+                borders: true,
+                children: [
+                    {
+                        type: "DropZone",
+                        property: values.backgroundContent,
+                        placeholder: "Background content, place widgets here"
+                    }
+                ]
+            },
+        ]
+    };
     const loader = {
         type: "Container",
         borders: true,
@@ -86,6 +103,6 @@ export function getPreview(values, isDarkMode) {
     };
     return {
         type: "Container",
-        children: [titleHeader, timeLine, loader]
+        children: [titleHeader, timeLine, background, loader]
     };
 }

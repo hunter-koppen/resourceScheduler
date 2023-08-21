@@ -8,7 +8,8 @@ export class ResourceScheduler extends Component {
     state = {
         initialize: false,
         groupData: [],
-        appointmentData: []
+        appointmentData: [],
+        backgroundData: []
     };
 
     componentDidUpdate(prevProps) {
@@ -19,6 +20,9 @@ export class ResourceScheduler extends Component {
         if (prevProps.appointmentData.status === "loading" && this.props.appointmentData.status === "available") {
             this.generateAppointments();
         }
+        if (prevProps.backgroundData.status === "loading" && this.props.backgroundData.status === "available") {
+            this.generateBackgroundItems();
+        }
 
         // Check if the datasource has changed
         if (prevProps.groupData && prevProps.groupData !== this.props.groupData) {
@@ -26,6 +30,9 @@ export class ResourceScheduler extends Component {
         }
         if (prevProps.appointmentData && prevProps.appointmentData !== this.props.appointmentData) {
             this.generateAppointments();
+        }
+        if (prevProps.backgroundData && prevProps.backgroundData !== this.props.backgroundData) {
+            this.generateBackgroundItems();
         }
 
         // Check if all required fields are populated, then render the timeline
@@ -88,6 +95,29 @@ export class ResourceScheduler extends Component {
         });
         this.setState({
             appointmentData: appointmentsArray
+        });
+    };
+
+    generateBackgroundItems = () => {
+        const { backgroundData, backgroundGroupId, backgroundStart, backgroundEnd, backgroundContent } = this.props;
+        const backgroundsArray = [];
+        backgroundData.items.forEach(mxObject => {
+            const group = backgroundGroupId.get(mxObject).value;
+            const start = backgroundStart.get(mxObject).value;
+            const end = backgroundEnd.get(mxObject).value;
+            const content = backgroundContent?.get(mxObject);
+            const appointmentObj = {
+                id: mxObject.id,
+                start,
+                end,
+                content,
+                group,
+                type: "background"
+            };
+            backgroundsArray.push(appointmentObj);
+        });
+        this.setState({
+            backgroundData: backgroundsArray
         });
     };
 
@@ -181,7 +211,7 @@ export class ResourceScheduler extends Component {
                     dayStart={this.convertToDate(this.props.dayStart)}
                     dayEnd={this.convertToDate(this.props.dayEnd)}
                     hideWeekends={this.props.hideWeekends.value}
-                    itemData={this.state.appointmentData}
+                    itemData={this.state.appointmentData.concat(this.state.backgroundData)}
                     groupData={this.state.groupData}
                     groupHeightMode={this.props.groupHeightMode}
                     allowDragging={this.props.allowDragging}

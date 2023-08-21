@@ -28,3 +28,15 @@
 .resource-scheduler .vis-major {
     font-weight: bold;
 }
+.resource-scheduler .vis-item.vis-background {
+    background-color: white;
+}
+.resource-scheduler .vis-timeline {
+    background-color: white;
+}
+.resource-scheduler .vis-grid {
+    background-color: #F8F8F8;
+}
+.resource-scheduler .vis-time-axis .vis-text {
+    background-color: white;
+}
