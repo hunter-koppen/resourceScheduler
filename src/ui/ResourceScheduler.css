@@ -13,3 +13,12 @@
 .resource-scheduler .vis-labelset .vis-label .vis-inner {
     padding: 0;
 }
+.resource-scheduler .vis-group-level-unknown-but-gte1 {
+    border: none;
+}
+.resource-scheduler .vis-label.vis-nested-group.vis-group-level-0 {
+    background-color: inherit;
+}
+.resource-scheduler .vis-ltr .vis-label.vis-nested-group .vis-inner {
+    padding-left: 0;
+}

@@ -217,7 +217,13 @@ export class VisTimeline extends Component {
 
         // Check if the group is already in the portalGroups list
         const groupExists = this.portalGroups.some(entry => entry.group.id === group.id);
-        if (!groupExists) {
+
+        if (groupExists) {
+            // If the group exists, set the element again (needed for nested groups)
+            const existingGroupIndex = this.portalGroups.findIndex(entry => entry.group.id === group.id);
+            this.portalGroups[existingGroupIndex].element = element;
+        } else {
+            // If the group doesn't exist, add it to the portalGroups list
             this.portalGroups.push({ group, element });
         }
 
