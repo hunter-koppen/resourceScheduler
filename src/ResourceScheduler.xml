@@ -77,7 +77,7 @@
                     <caption>Groups</caption>
                     <description>Return the list of groups you wish to show in the scheduler</description>
                 </property>
-                <property key="groupContent" type="widgets" required="false" dataSource="groupData">
+                <property key="groupContent" type="widgets" required="true" dataSource="groupData">
                     <caption>Group content, place widgets here</caption>
                     <description>The content to render inside a group</description>
                 </property>
@@ -115,40 +115,40 @@
                 </property>
             </propertyGroup>
         </propertyGroup>
-        <propertyGroup caption="Items">
+        <propertyGroup caption="Appointments">
             <propertyGroup caption="Datasource">
-                <property key="itemData" type="datasource" required="false" isList="true">
-                    <caption>Items</caption>
-                    <description>Return the list of items you wish to show in the scheduler</description>
+                <property key="appointmentData" type="datasource" required="false" isList="true">
+                    <caption>Appointments</caption>
+                    <description>Return the list of appointments you wish to show in the scheduler</description>
                 </property>
-                <property key="itemContent" type="widgets" required="false" dataSource="itemData">
-                    <caption>Item content, place widgets here</caption>
-                    <description>The content to render inside an Item</description>
+                <property key="appointmentContent" type="widgets" required="true" dataSource="appointmentData">
+                    <caption>Appointment content, place widgets here</caption>
+                    <description>The content to render inside an appointment</description>
                 </property>
-                <property key="itemStart" type="attribute" required="true" dataSource="itemData">
+                <property key="appointmentStart" type="attribute" required="true" dataSource="appointmentData">
                     <caption>StartTime</caption>
                     <description />
                     <attributeTypes>
                         <attributeType name="DateTime" />
                     </attributeTypes>
                 </property>
-                <property key="itemEnd" type="attribute" required="true" dataSource="itemData">
+                <property key="appointmentEnd" type="attribute" required="true" dataSource="appointmentData">
                     <caption>EndTime</caption>
                     <description />
                     <attributeTypes>
                         <attributeType name="DateTime" />
                     </attributeTypes>
                 </property>
-                <property key="itemGroupId" type="attribute" required="true" dataSource="itemData">
+                <property key="appointmentGroupId" type="attribute" required="true" dataSource="appointmentData">
                     <caption>Group ID</caption>
                     <description>Use an association to select the group Id</description>
                     <attributeTypes>
                         <attributeType name="String" />
                     </attributeTypes>
                 </property>
-                <property key="itemTooltipText" type="attribute" required="false" dataSource="itemData">
+                <property key="appointmentTooltipText" type="attribute" required="false" dataSource="appointmentData">
                     <caption>Tooltip Text</caption>
-                    <description>The text to show in the tooltip when hovering over an item.</description>
+                    <description>The text to show in the tooltip when hovering over an appointment.</description>
                     <attributeTypes>
                         <attributeType name="String" />
                     </attributeTypes>
@@ -156,16 +156,16 @@
             </propertyGroup>
             <propertyGroup caption="Settings">
                 <property key="stack" type="boolean" required="true" defaultValue="true">
-                    <caption>Stack items?</caption>
-                    <description>Items will be stacked on top of each other such that they do not overlap.</description>
+                    <caption>Stack appointments?</caption>
+                    <description>Appointments will be stacked on top of each other such that they do not overlap.</description>
                 </property>
                 <property key="allowDragging" type="boolean" required="true" defaultValue="false">
                     <caption>Allow dragging?</caption>
-                    <description>Allow items to be moved/stretched on the timeline?</description>
+                    <description>Allow appointments to be moved/stretched on the timeline?</description>
                 </property>
                 <property key="allowDraggingOtherGroup" type="boolean" required="true" defaultValue="false">
                     <caption>Allow dragging to groups?</caption>
-                    <description>Allow items to be moved to a different group?</description>
+                    <description>Allow appointments to be moved to a different group?</description>
                 </property>
             </propertyGroup>
         </propertyGroup>
@@ -196,7 +196,7 @@
             <propertyGroup caption="Timeline">
                 <property key="onTimelineClick" type="action" required="false">
                     <caption>On timeline click</caption>
-                    <description>Action to call when clicking somewhere on the timeline that is not an item, you can use this to create new items.</description>
+                    <description>Action to call when clicking somewhere on the timeline that is not an appointment or background item.</description>
                 </property>
                 <property key="onRangeChanged" type="action" required="false">
                     <caption>On range change</caption>
@@ -209,14 +209,14 @@
                     <description>Action to call when clicking on a group.</description>
                 </property>
             </propertyGroup>
-            <propertyGroup caption="Items">
-                <property key="onDrag" type="action" required="false" dataSource="itemData">
+            <propertyGroup caption="Appointments">
+                <property key="onDrag" type="action" required="false" dataSource="appointmentData">
                     <caption>On drag</caption>
-                    <description>Action to call when dragging items on the timeline.</description>
+                    <description>Action to call when dragging appointments on the timeline.</description>
                 </property>
-                <property key="onItemClick" type="action" required="false" dataSource="itemData">
-                    <caption>On item click</caption>
-                    <description>Action to call when clicking on an item.</description>
+                <property key="onAppointmentClick" type="action" required="false" dataSource="appointmentData">
+                    <caption>On appointment click</caption>
+                    <description>Action to call when clicking on an appointment.</description>
                 </property>
             </propertyGroup>
         </propertyGroup>

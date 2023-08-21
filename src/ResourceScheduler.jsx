@@ -8,24 +8,24 @@ export class ResourceScheduler extends Component {
     state = {
         initialize: false,
         groupData: [],
-        itemData: []
+        appointmentData: []
     };
 
     componentDidUpdate(prevProps) {
-        // items datasource is loaded so we can create timeline items from it
+        // datasources are loaded so we can create timeline items from it
         if (prevProps.groupData.status === "loading" && this.props.groupData.status === "available") {
             this.generateGroups();
         }
-        if (prevProps.itemData.status === "loading" && this.props.itemData.status === "available") {
-            this.generateItems();
+        if (prevProps.appointmentData.status === "loading" && this.props.appointmentData.status === "available") {
+            this.generateAppointments();
         }
 
         // Check if the datasource has changed
-        if (prevProps.itemData && prevProps.itemData !== this.props.itemData) {
-            this.generateItems();
-        }
         if (prevProps.groupData && prevProps.groupData !== this.props.groupData) {
             this.generateGroups();
+        }
+        if (prevProps.appointmentData && prevProps.appointmentData !== this.props.appointmentData) {
+            this.generateAppointments();
         }
 
         // Check if all required fields are populated, then render the timeline
@@ -67,16 +67,16 @@ export class ResourceScheduler extends Component {
         });
     };
 
-    generateItems = () => {
-        const { itemData, itemGroupId, itemStart, itemEnd, itemContent, itemTooltipText } = this.props;
-        const itemsArray = [];
-        itemData.items.forEach(mxObject => {
-            const group = itemGroupId.get(mxObject).value;
-            const start = itemStart.get(mxObject).value;
-            const end = itemEnd.get(mxObject).value;
-            const content = itemContent.get(mxObject);
-            const title = itemTooltipText?.get(mxObject).value;
-            const itemObj = {
+    generateAppointments = () => {
+        const { appointmentData, appointmentGroupId, appointmentStart, appointmentEnd, appointmentContent, appointmentTooltipText } = this.props;
+        const appointmentsArray = [];
+        appointmentData.items.forEach(mxObject => {
+            const group = appointmentGroupId.get(mxObject).value;
+            const start = appointmentStart.get(mxObject).value;
+            const end = appointmentEnd.get(mxObject).value;
+            const content = appointmentContent.get(mxObject);
+            const title = appointmentTooltipText?.get(mxObject).value;
+            const appointmentObj = {
                 id: mxObject.id,
                 start,
                 end,
@@ -84,10 +84,10 @@ export class ResourceScheduler extends Component {
                 group,
                 title
             };
-            itemsArray.push(itemObj);
+            appointmentsArray.push(appointmentObj);
         });
         this.setState({
-            itemData: itemsArray
+            appointmentData: appointmentsArray
         });
     };
 
@@ -149,7 +149,7 @@ export class ResourceScheduler extends Component {
             this.props.eventGroupId.setValue(item.group);
         }
         if (this.props.onDrag) {
-            const draggedItem = this.props.itemData.items.find(mxObject => mxObject.id === item.id);
+            const draggedItem = this.props.appointmentData.items.find(mxObject => mxObject.id === item.id);
             if (draggedItem) {
                 this.props.onDrag.get(draggedItem).execute();
             }
@@ -181,7 +181,7 @@ export class ResourceScheduler extends Component {
                     dayStart={this.convertToDate(this.props.dayStart)}
                     dayEnd={this.convertToDate(this.props.dayEnd)}
                     hideWeekends={this.props.hideWeekends.value}
-                    itemData={this.state.itemData}
+                    itemData={this.state.appointmentData}
                     groupData={this.state.groupData}
                     groupHeightMode={this.props.groupHeightMode}
                     allowDragging={this.props.allowDragging}

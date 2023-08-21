@@ -25,3 +25,6 @@
 .resource-scheduler .vis-ltr .vis-label:not(.vis-nesting-group):not(.vis-group-level-0) {
     padding-left: 0;
 }
+.resource-scheduler .vis-major {
+    font-weight: bold;
+}
