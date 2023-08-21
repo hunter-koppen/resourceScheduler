@@ -14,9 +14,8 @@
 [link to GitHub issues]
 
 ## To do
-- Close/Open groups
-- Nested groups
 - Background items
+- Nested groups collapse function
 
 Later:
 - Better hovers
