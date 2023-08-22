@@ -160,7 +160,8 @@ export class VisTimeline extends Component {
             groupTemplate: this.groupTemplateHandler,
             margin: {
                 item: {
-                    horizontal : -1
+                    horizontal: 0,
+                    vertical: 10
                 },
                 axis: 5 // minimal margin between items and the axis
             },
