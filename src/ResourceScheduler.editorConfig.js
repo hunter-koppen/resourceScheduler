@@ -105,8 +105,15 @@ export function getPreview(values, isDarkMode) {
             }
         ]
     };
-    return {
-        type: "Container",
-        children: [titleHeader, timeLine, background, loader]
-    };
+    if (values.backgroundData) {
+        return {
+            type: "Container",
+            children: [titleHeader, timeLine, background, loader]
+        };
+    } else {
+        return {
+            type: "Container",
+            children: [titleHeader, timeLine, loader]
+        };
+    }
 }

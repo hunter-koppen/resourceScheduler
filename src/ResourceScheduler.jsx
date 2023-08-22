@@ -15,13 +15,13 @@ export class ResourceScheduler extends Component {
     componentDidUpdate(prevProps) {
         const { groupData, appointmentData, backgroundData, dayStart, dayEnd, hideWeekends } = this.props;
         // datasources are loaded so we can create timeline items from it
-        if (prevProps.groupData.status === "loading" && groupData.status === "available") {
+        if (prevProps.groupData?.status === "loading" && groupData?.status === "available") {
             this.generateGroups();
         }
-        if (prevProps.appointmentData.status === "loading" && appointmentData.status === "available") {
+        if (prevProps.appointmentData?.status === "loading" && appointmentData?.status === "available") {
             this.generateAppointments();
         }
-        if (prevProps.backgroundData.status === "loading" && backgroundData.status === "available") {
+        if (prevProps.backgroundData?.status === "loading" && backgroundData?.status === "available") {
             this.generateBackgroundItems();
         }
 
