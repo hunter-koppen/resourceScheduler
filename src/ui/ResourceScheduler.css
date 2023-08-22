@@ -19,6 +19,9 @@
 .resource-scheduler .vis-label.vis-nested-group.vis-group-level-0 {
     background-color: inherit;
 }
+.resource-scheduler .vis-label.vis-nested-group.vis-group-level-unknown-but-gte1 {
+    background-color: inherit;
+}
 .resource-scheduler .vis-ltr .vis-label.vis-nested-group .vis-inner {
     padding-left: 0;
 }
@@ -36,7 +39,11 @@
 .resource-scheduler .vis-timeline {
     background-color: white;
 }
-.resource-scheduler .vis-content .vis-itemset>.vis-background {
+.resource-scheduler .vis-content .vis-itemset > .vis-background {
     background-color: rgba(248, 248, 248, 0.5);
     z-index: 0;
+}
+.resource-scheduler .vis-label.vis-nesting-group:before {
+    display: none;
+    content: none;
 }
