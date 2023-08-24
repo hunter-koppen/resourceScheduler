@@ -14,7 +14,6 @@
 [link to GitHub issues]
 
 ## To do
-- Background items
 - Nested groups collapse function
 
 Later:
@@ -23,3 +22,4 @@ Later:
 - Time Axis & Step (so you can set it fixed)
 - Stack or overlap?
 - Drop feature
+- On click background item (need code to find availability from the correct group id and start & enddates)
