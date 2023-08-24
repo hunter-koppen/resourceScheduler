@@ -43,7 +43,7 @@ export class VisTimeline extends Component {
             }
 
             // Check if any options changed
-            let updateOptions = {};
+            const updateOptions = {};
 
             const hiddenDates = this.timeline.options.hiddenDates;
             if (prevProps.dayStart.getTime() !== dayStart.getTime()) {
@@ -108,20 +108,35 @@ export class VisTimeline extends Component {
     }
 
     initialize = () => {
-        this.amountOfItems = this.props.itemData.length;
-        this.amountOfGroups = this.props.groupData.length;
-        this.items = new DataSet(this.props.itemData);
-        this.groups = new DataSet(this.props.groupData);
+        const { itemData, groupData, mouseDown, mouseMove, mouseUp } = this.props;
+        this.amountOfItems = itemData.length;
+        this.amountOfGroups = groupData.length;
+        this.items = new DataSet(itemData);
+        this.groups = new DataSet(groupData);
 
         this.timeline = new Timeline(this.ref.current, this.items, this.groups, this.getOptions());
 
         this.timeline.on("rangechanged", this.onRangeChanged);
-        this.timeline.on("mouseDown", this.props.mouseDown);
-        this.timeline.on("mouseMove", this.props.mouseMove);
-        this.timeline.on("mouseUp", this.props.mouseUp);
+        this.timeline.on("mouseDown", mouseDown);
+        this.timeline.on("mouseMove", mouseMove);
+        this.timeline.on("mouseUp", mouseUp);
     };
 
     getOptions = () => {
+        const {
+            allowDragging,
+            allowDraggingOtherGroup,
+            maxHeight,
+            stack,
+            moveable,
+            zoomSetting,
+            timelineStart,
+            timelineEnd,
+            onMove,
+            groupHeightMode,
+            dayStart,
+            dayEnd
+        } = this.props;
         // options to add later: format, zoomkey, tooltip settings, height & maxheight, moveable, timeaxisscale
         // item titles will be displayed as a tooltip.
 
@@ -129,8 +144,8 @@ export class VisTimeline extends Component {
             locale: mx.session.sessionData.locale.code,
             editable: {
                 add: false, // If true, new items can be created by double tapping an empty space in the Timeline. See section Editing Items for a detailed explanation.
-                updateTime: this.props.allowDragging, // If true, items can be dragged to another moment in time. See section Editing Items for a detailed explanation.
-                updateGroup: this.props.allowDraggingOtherGroup, // If true, items can be dragged from one group to another. Only applicable when the Timeline has groups. See section Editing Items for a detailed explanation.
+                updateTime: allowDragging, // If true, items can be dragged to another moment in time. See section Editing Items for a detailed explanation.
+                updateGroup: allowDraggingOtherGroup, // If true, items can be dragged from one group to another. Only applicable when the Timeline has groups. See section Editing Items for a detailed explanation.
                 remove: false, // If true, items can be deleted by first selecting them, and then clicking the delete button on the top right of the item. See section Editing Items for a detailed explanation.
                 overrideItems: false // If true, item specific editable properties are overridden by timeline settings
             },
@@ -144,23 +159,23 @@ export class VisTimeline extends Component {
                 item: "bottom"
             },
             type: "range",
-            maxHeight: this.props.maxHeight ? this.props.maxHeight : "",
-            stack: this.props.stack,
-            moveable: this.props.moveable,
-            zoomKey:
-                this.props.zoomSetting === "scroll" || this.props.zoomSetting === "none" ? "" : this.props.zoomSetting,
-            zoomable: this.props.zoomSetting !== "none",
-            start: this.props.timelineStart,
-            end: this.props.timelineEnd,
-            onMove: this.props.onMove,
+            maxHeight: maxHeight ? maxHeight : "",
+            stack,
+            moveable,
+            zoomKey: zoomSetting === "scroll" || zoomSetting === "none" ? "" : zoomSetting,
+            zoomable: zoomSetting !== "none",
+            start: timelineStart,
+            end: timelineEnd,
+            onMove,
             itemsAlwaysDraggable: { item: true, range: true },
-            groupHeightMode: this.props.groupHeightMode ? this.props.groupHeightMode : "auto",
+            groupHeightMode: groupHeightMode ? groupHeightMode : "auto",
             horizontalScroll: false,
             template: this.itemTemplateHandler,
             groupTemplate: this.groupTemplateHandler,
             margin: {
                 item: {
-                    horizontal : -1
+                    horizontal: 0,
+                    vertical: 10
                 },
                 axis: 5 // minimal margin between items and the axis
             },
@@ -168,19 +183,16 @@ export class VisTimeline extends Component {
                 {
                     id: "dayStart",
                     start: this.startOfDay,
-                    end: this.props.dayStart,
+                    end: dayStart,
                     repeat: "daily"
                 },
                 {
                     id: "dayEnd",
-                    start: this.props.dayEnd,
+                    start: dayEnd,
                     end: this.endOfDay,
                     repeat: "daily"
                 }
-            ],
-            loadingScreenTemplate: () => {
-                return "";
-            }
+            ]
         };
 
         if (this.props.hideWeekends) {
@@ -192,8 +204,8 @@ export class VisTimeline extends Component {
             });
         }
 
-        this.rangeStart = this.props.timelineStart;
-        this.rangeEnd = this.props.timelineEnd;
+        this.rangeStart = timelineStart;
+        this.rangeEnd = timelineEnd;
 
         return options;
     };
@@ -294,6 +306,8 @@ export class VisTimeline extends Component {
                 }
                 return createPortal(item.content, element, item.id);
             });
+        } else {
+            return null;
         }
     }
 
@@ -308,6 +322,8 @@ export class VisTimeline extends Component {
                 }
                 return createPortal(group.content, element, group.id);
             });
+        } else {
+            return null;
         }
     }
 
@@ -316,7 +332,11 @@ export class VisTimeline extends Component {
             const timelineloader = this.ref.current.querySelector(".vis-loading-screen");
             if (timelineloader) {
                 return createPortal(this.props.loadingContent, timelineloader, 1);
+            } else {
+                return null;
             }
+        } else {
+            return null;
         }
     }
 
@@ -333,8 +353,8 @@ export class VisTimeline extends Component {
                 {this.renderLoader()}
                 {this.renderGroups()}
                 {this.renderItems()}
-                <button onClick={this.redraw}>redraw test</button>
             </div>
         );
+        //<button onClick={this.redraw}>redraw test</button>
     }
 }

@@ -13,30 +13,31 @@ export class ResourceScheduler extends Component {
     };
 
     componentDidUpdate(prevProps) {
+        const { groupData, appointmentData, backgroundData, dayStart, dayEnd, hideWeekends } = this.props;
         // datasources are loaded so we can create timeline items from it
-        if (prevProps.groupData.status === "loading" && this.props.groupData.status === "available") {
+        if (prevProps.groupData?.status === "loading" && groupData?.status === "available") {
             this.generateGroups();
         }
-        if (prevProps.appointmentData.status === "loading" && this.props.appointmentData.status === "available") {
+        if (prevProps.appointmentData?.status === "loading" && appointmentData?.status === "available") {
             this.generateAppointments();
         }
-        if (prevProps.backgroundData.status === "loading" && this.props.backgroundData.status === "available") {
+        if (prevProps.backgroundData?.status === "loading" && backgroundData?.status === "available") {
             this.generateBackgroundItems();
         }
 
         // Check if the datasource has changed
-        if (prevProps.groupData && prevProps.groupData !== this.props.groupData) {
+        if (prevProps.groupData && prevProps.groupData !== groupData) {
             this.generateGroups();
         }
-        if (prevProps.appointmentData && prevProps.appointmentData !== this.props.appointmentData) {
+        if (prevProps.appointmentData && prevProps.appointmentData !== appointmentData) {
             this.generateAppointments();
         }
-        if (prevProps.backgroundData && prevProps.backgroundData !== this.props.backgroundData) {
+        if (prevProps.backgroundData && prevProps.backgroundData !== backgroundData) {
             this.generateBackgroundItems();
         }
 
         // Check if all required fields are populated, then render the timeline
-        if (!this.state.initialize && this.props.dayStart && this.props.dayEnd && this.props.hideWeekends) {
+        if (!this.state.initialize && dayStart && dayEnd && hideWeekends) {
             this.setState({
                 initialize: true
             });
@@ -54,13 +55,14 @@ export class ResourceScheduler extends Component {
     generateGroups = () => {
         const { groupData, groupId, groupContent, groupSort } = this.props;
         const groupsArray = [];
+
         groupData.items.forEach(mxObject => {
             const id = groupId.get(mxObject).value;
             const content = groupContent.get(mxObject);
             const order = groupSort.get(mxObject).value;
             const nestedGroups = this.props.groupData.items
-                .filter(mxObject => this.props.parentGroupId?.get(mxObject).value === id)
-                .map(mxObject => groupId.get(mxObject).value);
+                .filter(filterObj => this.props.parentGroupId?.get(filterObj).value === id)
+                .map(mapObj => groupId.get(mapObj).value);
             const groupObj = {
                 id,
                 content,
@@ -69,14 +71,23 @@ export class ResourceScheduler extends Component {
             };
             groupsArray.push(groupObj);
         });
+
         this.setState({
             groupData: groupsArray
         });
     };
 
     generateAppointments = () => {
-        const { appointmentData, appointmentGroupId, appointmentStart, appointmentEnd, appointmentContent, appointmentTooltipText } = this.props;
+        const {
+            appointmentData,
+            appointmentGroupId,
+            appointmentStart,
+            appointmentEnd,
+            appointmentContent,
+            appointmentTooltipText
+        } = this.props;
         const appointmentsArray = [];
+
         appointmentData.items.forEach(mxObject => {
             const group = appointmentGroupId.get(mxObject).value;
             const start = appointmentStart.get(mxObject).value;
@@ -93,6 +104,7 @@ export class ResourceScheduler extends Component {
             };
             appointmentsArray.push(appointmentObj);
         });
+
         this.setState({
             appointmentData: appointmentsArray
         });
@@ -101,6 +113,7 @@ export class ResourceScheduler extends Component {
     generateBackgroundItems = () => {
         const { backgroundData, backgroundGroupId, backgroundStart, backgroundEnd, backgroundContent } = this.props;
         const backgroundsArray = [];
+
         backgroundData.items.forEach(mxObject => {
             const group = backgroundGroupId.get(mxObject).value;
             const start = backgroundStart.get(mxObject).value;
@@ -116,6 +129,7 @@ export class ResourceScheduler extends Component {
             };
             backgroundsArray.push(appointmentObj);
         });
+
         this.setState({
             backgroundData: backgroundsArray
         });
@@ -136,18 +150,16 @@ export class ResourceScheduler extends Component {
                 if (this.props.onTimelineClick && this.props.onTimelineClick.canExecute) {
                     this.props.onTimelineClick.execute();
                 }
-            }
-            // Handle click on item
-            else if (event.item) {
+            } else if (event.item) {
+                // Handle click on item
                 if (this.props.onItemClick) {
                     const clickedItem = this.props.itemData.items.find(mxObject => mxObject.id === event.item);
                     if (clickedItem) {
                         this.props.onItemClick.get(clickedItem).execute();
                     }
                 }
-            }
-            // Handle click of group
-            else if (event.what === "group-label") {
+            } else if (event.what === "group-label") {
+                // Handle click of group
                 if (this.props.onGroupClick) {
                     const clickedGroup = this.props.groupData.items.find(
                         mxObject => this.props.groupId.get(mxObject).value === event.group
@@ -169,63 +181,80 @@ export class ResourceScheduler extends Component {
     };
 
     onMove = (item, callback) => {
-        if (this.props.eventStartTime) {
-            this.props.eventStartTime.setValue(item.start);
+        const { eventStartTime, eventEndTime, eventGroupId, onDrag, appointmentData } = this.props;
+
+        if (eventStartTime) {
+            eventStartTime.setValue(item.start);
         }
-        if (this.props.eventEndTime) {
-            this.props.eventEndTime.setValue(item.end);
+        if (eventEndTime) {
+            eventEndTime.setValue(item.end);
         }
-        if (this.props.eventGroupId) {
-            this.props.eventGroupId.setValue(item.group);
+        if (eventGroupId) {
+            eventGroupId.setValue(item.group);
         }
-        if (this.props.onDrag) {
-            const draggedItem = this.props.appointmentData.items.find(mxObject => mxObject.id === item.id);
+        if (onDrag) {
+            const draggedItem = appointmentData.items.find(mxObject => mxObject.id === item.id);
             if (draggedItem) {
-                this.props.onDrag.get(draggedItem).execute();
+                onDrag.get(draggedItem).execute();
             }
         }
+
         // Block the move, should be determined in Mendix if the data can change
         callback(null);
     };
 
     onRangeChanged = (start, end) => {
-        if (
-            this.props.timelineStart &&
-            this.props.timelineEnd &&
-            (this.props.timelineStart.value !== start || this.props.timelineEnd.value !== end)
-        ) {
-            this.props.timelineStart.setValue(start);
-            this.props.timelineEnd.setValue(end);
-            if (this.props.onRangeChanged && this.props.onRangeChanged.canExecute) {
-                this.props.onRangeChanged.execute();
+        const { timelineStart, timelineEnd, onRangeChanged } = this.props;
+
+        if (timelineStart && timelineEnd && (timelineStart.value !== start || timelineEnd.value !== end)) {
+            timelineStart.setValue(start);
+            timelineEnd.setValue(end);
+            if (onRangeChanged && onRangeChanged.canExecute) {
+                onRangeChanged.execute();
             }
         }
     };
 
     render() {
         if (this.state.initialize) {
+            const {
+                timelineStart,
+                timelineEnd,
+                dayStart,
+                dayEnd,
+                hideWeekends,
+                groupHeightMode,
+                allowDragging,
+                allowDraggingOtherGroup,
+                zoomSetting,
+                timelineMovable,
+                timelineMaxHeight,
+                loadingContent,
+                stack
+            } = this.props;
+
             return (
                 <VisTimeline
-                    timelineStart={this.props.timelineStart?.value}
-                    timelineEnd={this.props.timelineEnd?.value}
-                    dayStart={this.convertToDate(this.props.dayStart)}
-                    dayEnd={this.convertToDate(this.props.dayEnd)}
-                    hideWeekends={this.props.hideWeekends.value}
+                    timelineStart={timelineStart?.value}
+                    timelineEnd={timelineEnd?.value}
+                    dayStart={this.convertToDate(dayStart)}
+                    dayEnd={this.convertToDate(dayEnd)}
+                    hideWeekends={hideWeekends.value}
                     itemData={this.state.appointmentData.concat(this.state.backgroundData)}
                     groupData={this.state.groupData}
-                    groupHeightMode={this.props.groupHeightMode}
-                    allowDragging={this.props.allowDragging}
-                    allowDraggingOtherGroup={this.props.allowDraggingOtherGroup}
+                    groupHeightMode={groupHeightMode}
+                    allowDragging={allowDragging}
+                    allowDraggingOtherGroup={allowDraggingOtherGroup}
                     mouseUp={this.mouseUp}
                     mouseDown={this.mouseDown}
                     mouseMove={this.mouseMove}
                     onMove={this.onMove}
                     onRangeChanged={this.onRangeChanged}
-                    zoomSetting={this.props.zoomSetting}
-                    moveable={this.props.timelineMovable}
-                    maxHeight={this.props.timelineMaxHeight?.value}
-                    loadingContent={this.props.loadingContent}
-                    stack={this.props.stack}
+                    zoomSetting={zoomSetting}
+                    moveable={timelineMovable}
+                    maxHeight={timelineMaxHeight?.value}
+                    loadingContent={loadingContent}
+                    stack={stack}
                 />
             );
         } else {

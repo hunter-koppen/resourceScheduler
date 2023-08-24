@@ -68,7 +68,11 @@ export function getPreview(values, isDarkMode) {
                 borders: true,
                 grow: 2,
                 children: [
-                    { type: "DropZone", property: values.appointmentContent, placeholder: "Appointment content, place widgets here" }
+                    {
+                        type: "DropZone",
+                        property: values.appointmentContent,
+                        placeholder: "Appointment content, place widgets here"
+                    }
                 ]
             }
         ]
@@ -87,7 +91,7 @@ export function getPreview(values, isDarkMode) {
                         placeholder: "Background content, place widgets here"
                     }
                 ]
-            },
+            }
         ]
     };
     const loader = {
@@ -101,8 +105,15 @@ export function getPreview(values, isDarkMode) {
             }
         ]
     };
-    return {
-        type: "Container",
-        children: [titleHeader, timeLine, background, loader]
-    };
+    if (values.backgroundData) {
+        return {
+            type: "Container",
+            children: [titleHeader, timeLine, background, loader]
+        };
+    } else {
+        return {
+            type: "Container",
+            children: [titleHeader, timeLine, loader]
+        };
+    }
 }

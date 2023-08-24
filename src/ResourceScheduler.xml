@@ -252,6 +252,12 @@
                     <description>Action to call when clicking on an appointment.</description>
                 </property>
             </propertyGroup>
+            <propertyGroup caption="Background items">
+                <property key="onBackgroundClick" type="action" required="false" dataSource="backgroundData">
+                    <caption>On background item click</caption>
+                    <description>Action to call when clicking on a background item.</description>
+                </property>
+            </propertyGroup>
         </propertyGroup>
     </properties>
 </widget>
