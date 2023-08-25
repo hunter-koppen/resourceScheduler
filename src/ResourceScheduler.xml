@@ -160,8 +160,8 @@
                     <description>Appointments will be stacked on top of each other such that they do not overlap.</description>
                 </property>
                 <property key="allowDragging" type="boolean" required="true" defaultValue="false">
-                    <caption>Allow dragging?</caption>
-                    <description>Allow appointments to be moved/stretched on the timeline?</description>
+                    <caption>Allow dragging time?</caption>
+                    <description>Allow appointments to be stretched on the timeline?</description>
                 </property>
                 <property key="allowDraggingOtherGroup" type="boolean" required="true" defaultValue="false">
                     <caption>Allow dragging to groups?</caption>
