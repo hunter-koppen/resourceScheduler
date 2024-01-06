@@ -40,29 +40,6 @@
                     <returnType type="Boolean" />
                 </property>
             </propertyGroup>
-            <propertyGroup caption="Zooming">
-                <property key="zoomSetting" type="enumeration" defaultValue="none">
-                    <caption>Zooming</caption>
-                    <description>Allow zoom functionality for the timeline.</description>
-                    <enumerationValues>
-                        <enumerationValue key="none">None</enumerationValue>
-                        <enumerationValue key="scroll">Mouse scroll</enumerationValue>
-                        <enumerationValue key="shiftKey">Shift</enumerationValue>
-                        <enumerationValue key="ctrlKey">Ctrl</enumerationValue>
-                        <enumerationValue key="altKey">Alt</enumerationValue>
-                    </enumerationValues>
-                </property>
-                <property key="minZoom" type="expression" required="false">
-                    <caption>Min zoom</caption>
-                    <description>The minimum that the timeline can zoom in milliseconds</description>
-                    <returnType type="Integer" />
-                </property>
-                <property key="maxZoom" type="expression" required="false">
-                    <caption>Max zoom</caption>
-                    <description>The maximum that the timeline can zoom in milliseconds</description>
-                    <returnType type="Integer" />
-                </property>
-            </propertyGroup>
             <propertyGroup caption="Settings">
                 <property key="timelineMaxHeight" type="expression" required="false">
                     <caption>Max height</caption>
@@ -80,6 +57,29 @@
                 <property key="loadingContent" type="widgets" required="false">
                     <caption>Loading timeline, content here will be shown while the timeline is loading.</caption>
                     <description>The content to show while loading the timeline</description>
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Zooming">
+                <property key="zoomSetting" type="enumeration" defaultValue="none">
+                    <caption>Zooming</caption>
+                    <description>Allow zoom functionality for the timeline.</description>
+                    <enumerationValues>
+                        <enumerationValue key="none">None</enumerationValue>
+                        <enumerationValue key="scroll">Mouse scroll</enumerationValue>
+                        <enumerationValue key="shiftKey">Shift</enumerationValue>
+                        <enumerationValue key="ctrlKey">Ctrl</enumerationValue>
+                        <enumerationValue key="altKey">Alt</enumerationValue>
+                    </enumerationValues>
+                </property>
+                <property key="minZoom" type="expression" required="false">
+                    <caption>Min zoom</caption>
+                    <description>The minimum allowed zoom in milliseconds (Optional)</description>
+                    <returnType type="Integer" />
+                </property>
+                <property key="maxZoom" type="expression" required="false">
+                    <caption>Max zoom</caption>
+                    <description>The maximum allowed zoom in milliseconds (Optional)</description>
+                    <returnType type="Integer" />
                 </property>
             </propertyGroup>
         </propertyGroup>
@@ -215,7 +215,7 @@
             </propertyGroup>
         </propertyGroup>
         <propertyGroup caption="Events">
-            <propertyGroup caption="Data">
+            <propertyGroup caption="Event Data">
                 <property key="eventStartTime" type="attribute" required="false">
                     <caption>Event StartTime Attribute</caption>
                     <description>Attribute that will contain the start datetime of a timeline event (see readme)</description>
@@ -262,12 +262,6 @@
                 <property key="onAppointmentClick" type="action" required="false" dataSource="appointmentData">
                     <caption>On appointment click</caption>
                     <description>Action to call when clicking on an appointment.</description>
-                </property>
-            </propertyGroup>
-            <propertyGroup caption="Background items">
-                <property key="onBackgroundClick" type="action" required="false" dataSource="backgroundData">
-                    <caption>On background item click</caption>
-                    <description>Action to call when clicking on a background item.</description>
                 </property>
             </propertyGroup>
         </propertyGroup>

@@ -155,7 +155,6 @@ export class VisTimeline extends Component {
                 delay: 100
             },
             showWeekScale: true,
-            zoomMin: 7200000, // 2 hours
             orientation: {
                 axis: "top",
                 item: "bottom"
@@ -166,7 +165,7 @@ export class VisTimeline extends Component {
             moveable,
             zoomKey: zoomSetting === "scroll" || zoomSetting === "none" ? "" : zoomSetting,
             zoomable: zoomSetting !== "none",
-            zoomMin: zoomSetting === "none" ? 10 : minZoom,
+            zoomMin: zoomSetting === "none" ? 7200000 : minZoom,
             zoomMax: zoomSetting === "none" ? 315360000000000 : maxZoom,
             start: timelineStart,
             end: timelineEnd,
