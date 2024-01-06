@@ -264,9 +264,17 @@ export class VisTimeline extends Component {
         const toRemove = this.items.get({
             filter: item => !itemData.find(i => i.id === item.id)
         });
-        this.items.remove(toRemove);
 
-        // Run the update function based on the latest Mx data
+        // remove the items from the portalItems list
+        toRemove.forEach(item => {
+            const itemIndex = this.portalItems.findIndex(obj => obj.item.id === item.id);
+            if (itemIndex > -1) {
+                this.portalItems.splice(itemIndex, 1);
+            }
+        });
+
+        // Update the items in the timeline
+        this.items.remove(toRemove);
         this.items.update(itemData);
     };
 
@@ -280,9 +288,17 @@ export class VisTimeline extends Component {
         const toRemove = this.groups.get({
             filter: group => !groupData.find(g => g.id === group.id)
         });
-        this.groups.remove(toRemove);
 
-        // Run the update function based on the latest Mx data
+        // remove the groups from the portalGroups list
+        toRemove.forEach(group => {
+            const groupIndex = this.portalGroups.findIndex(obj => obj.group.id === group.id);
+            if (groupIndex > -1) {
+                this.portalGroups.splice(groupIndex, 1);
+            }
+        });
+
+        // Update the groups in the timeline
+        this.groups.remove(toRemove);
         this.groups.update(groupData);
     };
 
