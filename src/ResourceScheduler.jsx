@@ -227,6 +227,8 @@ export class ResourceScheduler extends Component {
                 allowDragging,
                 allowDraggingOtherGroup,
                 zoomSetting,
+                minZoom,
+                maxZoom,
                 timelineMovable,
                 timelineMaxHeight,
                 loadingContent,
@@ -251,6 +253,8 @@ export class ResourceScheduler extends Component {
                     onMove={this.onMove}
                     onRangeChanged={this.onRangeChanged}
                     zoomSetting={zoomSetting}
+                    minZoom={minZoom?.value}
+                    maxZoom={maxZoom?.value}
                     moveable={timelineMovable}
                     maxHeight={timelineMaxHeight?.value}
                     loadingContent={loadingContent}

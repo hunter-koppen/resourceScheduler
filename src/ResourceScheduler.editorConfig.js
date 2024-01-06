@@ -7,6 +7,10 @@ export function getProperties(values, defaultProperties, target) {
     if (values.timelineMovable === false) {
         hidePropertyIn(defaultProperties, values, "zoomSetting");
     }
+    if (values.zoomSetting === "none") {
+        hidePropertyIn(defaultProperties, values, "minZoom");
+        hidePropertyIn(defaultProperties, values, "maxZoom");
+    }
     if (values.customLoader === false) {
         hidePropertyIn(defaultProperties, values, "loadingContent");
     }

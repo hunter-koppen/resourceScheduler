@@ -40,16 +40,7 @@
                     <returnType type="Boolean" />
                 </property>
             </propertyGroup>
-            <propertyGroup caption="Settings">
-                <property key="timelineMaxHeight" type="expression" required="false">
-                    <caption>Max height</caption>
-                    <description>The max height of the timeline, can use any unit (Optional).</description>
-                    <returnType type="String" />
-                </property>
-                <property key="timelineMovable" type="boolean" required="true" defaultValue="true">
-                    <caption>Movable?</caption>
-                    <description>Specifies whether the Timeline can be moved and zoomed by dragging the window.</description>
-                </property>
+            <propertyGroup caption="Zooming">
                 <property key="zoomSetting" type="enumeration" defaultValue="none">
                     <caption>Zooming</caption>
                     <description>Allow zoom functionality for the timeline.</description>
@@ -60,6 +51,27 @@
                         <enumerationValue key="ctrlKey">Ctrl</enumerationValue>
                         <enumerationValue key="altKey">Alt</enumerationValue>
                     </enumerationValues>
+                </property>
+                <property key="minZoom" type="expression" required="false">
+                    <caption>Min zoom</caption>
+                    <description>The minimum that the timeline can zoom in milliseconds</description>
+                    <returnType type="Integer" />
+                </property>
+                <property key="maxZoom" type="expression" required="false">
+                    <caption>Max zoom</caption>
+                    <description>The maximum that the timeline can zoom in milliseconds</description>
+                    <returnType type="Integer" />
+                </property>
+            </propertyGroup>
+            <propertyGroup caption="Settings">
+                <property key="timelineMaxHeight" type="expression" required="false">
+                    <caption>Max height</caption>
+                    <description>The max height of the timeline, can use any unit (Optional).</description>
+                    <returnType type="String" />
+                </property>
+                <property key="timelineMovable" type="boolean" required="true" defaultValue="true">
+                    <caption>Movable?</caption>
+                    <description>Specifies whether the Timeline can be moved and zoomed by dragging the window.</description>
                 </property>
                 <property key="customLoader" type="boolean" required="true" defaultValue="false">
                     <caption>Loader?</caption>
