@@ -53,13 +53,13 @@ export class ResourceScheduler extends Component {
     };
 
     generateGroups = () => {
-        const { groupData, groupId, groupContent, groupSort } = this.props;
+        const { groupData, groupId, groupContent } = this.props;
         const groupsArray = [];
 
-        groupData.items.forEach(mxObject => {
+        groupData.items.forEach((mxObject, index) => {
             const id = groupId.get(mxObject).value;
             const content = groupContent.get(mxObject);
-            const order = groupSort.get(mxObject).value;
+            const order = index;
             const nestedGroups = this.props.groupData.items
                 .filter(filterObj => this.props.parentGroupId?.get(filterObj).value === id)
                 .map(mapObj => groupId.get(mapObj).value);

@@ -1,9 +1,9 @@
 {
   "name": "resourcescheduler",
   "widgetName": "ResourceScheduler",
-  "version": "1.0.0",
-  "description": "My widget description",
-  "copyright": "Kobeon BV 2023",
+  "version": "1.0.1",
+  "description": "",
+  "copyright": "Kobeon BV 2025",
   "author": "Hunter Koppen",
   "engines": {
     "node": ">=16"

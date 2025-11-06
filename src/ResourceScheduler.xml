@@ -100,13 +100,6 @@
                         <attributeType name="String" />
                     </attributeTypes>
                 </property>
-                <property key="groupSort" type="attribute" required="false" dataSource="groupData">
-                    <caption>Group sort</caption>
-                    <description>The attribute that will be sorted on</description>
-                    <attributeTypes>
-                        <attributeType name="String" />
-                    </attributeTypes>
-                </property>
                 <property key="parentGroupId" type="attribute" required="false" dataSource="groupData">
                     <caption>Parent Group ID</caption>
                     <description>If set the group will be nested inside the parent group</description>
