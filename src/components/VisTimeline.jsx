@@ -163,6 +163,7 @@ export class VisTimeline extends Component {
             maxHeight: maxHeight ? maxHeight : "",
             stack,
             moveable,
+            limitSize: false,
             zoomKey: zoomSetting === "scroll" || zoomSetting === "none" ? "" : zoomSetting,
             zoomable: zoomSetting !== "none",
             zoomMin: zoomSetting === "none" ? 7200000 : minZoom,
