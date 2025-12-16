@@ -135,6 +135,8 @@ export class ResourceScheduler extends Component {
         });
     };
 
+    lastClickTime = 0;
+
     mouseUp = event => {
         if (event && !this.dragging) {
             console.log(event);
@@ -147,8 +149,14 @@ export class ResourceScheduler extends Component {
                 if (this.props.eventGroupId && event.group) {
                     this.props.eventGroupId.setValue(event.group);
                 }
-                if (this.props.onTimelineClick && this.props.onTimelineClick.canExecute) {
-                    this.props.onTimelineClick.execute();
+
+                // Throttle the execution of onTimelineClick to prevent double firing
+                const now = Date.now();
+                if (now - this.lastClickTime > 500) {
+                    this.lastClickTime = now;
+                    if (this.props.onTimelineClick && this.props.onTimelineClick.canExecute) {
+                        this.props.onTimelineClick.execute();
+                    }
                 }
             } else if (event.item) {
                 // Handle click on item
