@@ -37,7 +37,7 @@ export class ResourceScheduler extends Component {
         }
 
         // Check if all required fields are populated, then render the timeline
-        if (!this.state.initialize && dayStart && dayEnd && hideWeekends) {
+        if (!this.state.initialize && dayStart?.value && dayEnd?.value && hideWeekends) {
             this.setState({
                 initialize: true
             });
