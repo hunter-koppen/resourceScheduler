@@ -80,8 +80,10 @@ export class VisTimeline extends Component {
                 prevProps.timelineEnd?.getTime() !== timelineEnd?.getTime()
             ) {
                 if (
-                    this.rangeStart.getTime() !== timelineStart.getTime() ||
-                    this.rangeEnd.getTime() !== timelineEnd.getTime()
+                    timelineStart &&
+                    timelineEnd &&
+                    (this.rangeStart?.getTime() !== timelineStart.getTime() ||
+                        this.rangeEnd?.getTime() !== timelineEnd.getTime())
                 ) {
                     this.rangeStart = timelineStart;
                     this.rangeEnd = timelineEnd;
