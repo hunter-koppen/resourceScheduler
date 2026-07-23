@@ -47,3 +47,27 @@
     display: none;
     content: none;
 }
+/* The timeline body scrolls internally (see verticalScroll option) so the
+   time-axis header stays pinned at the top. Give that header an opaque
+   background and lift it above the scrolling items, otherwise items scroll
+   through and make the header look transparent. */
+.resource-scheduler .vis-panel.vis-top {
+    background-color: white;
+    z-index: 1;
+}
+/* Render the internal vertical scrollbar as a slim, subtle bar instead of the
+   clunky default OS scrollbar. */
+.resource-scheduler .vis-panel.vis-vertical-scroll {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #c5cbd6 transparent;
+}
+.resource-scheduler .vis-panel.vis-vertical-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+.resource-scheduler .vis-panel.vis-vertical-scroll::-webkit-scrollbar-thumb {
+    background: #c5cbd6;
+    border-radius: 4px;
+}
+.resource-scheduler .vis-panel.vis-vertical-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}

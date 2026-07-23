@@ -139,7 +139,6 @@ export class ResourceScheduler extends Component {
 
     mouseUp = event => {
         if (event && !this.dragging) {
-            console.log(event);
             // Handle click on the timeline itself
             if (!event.item && event.what !== "group-label") {
                 if (this.props.eventStartTime && event.snappedTime) {

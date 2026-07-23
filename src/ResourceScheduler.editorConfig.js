@@ -20,7 +20,6 @@ export function getProperties(values, defaultProperties, target) {
 }
 
 export function getPreview(values, isDarkMode) {
-    console.log(values);
     const titleHeader = {
         type: "RowLayout",
         columnSize: "grow",

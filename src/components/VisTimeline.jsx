@@ -7,6 +7,9 @@ import "../../node_modules/vis-timeline/dist/vis-timeline-graph2d.min.css";
 export class VisTimeline extends Component {
     ref = createRef();
     timeline = null;
+    resizeObserver = null;
+    appliedMaxHeight = null;
+    itemFlushHandle = null;
     itemTemplateHandler = this.itemTemplate.bind(this);
     groupTemplateHandler = this.groupTemplate.bind(this);
     portalItems = [];
@@ -28,6 +31,13 @@ export class VisTimeline extends Component {
 
     componentDidMount() {
         this.initialize();
+
+        // When no explicit max height is configured, bound the timeline to the available
+        // viewport height so vis-timeline scrolls its body internally and keeps the
+        // time-axis header pinned at the top.
+        if (!this.props.maxHeight) {
+            this.observeAutoHeight();
+        }
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -104,10 +114,67 @@ export class VisTimeline extends Component {
     }
 
     componentWillUnmount() {
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
+        }
+        window.removeEventListener("resize", this.applyAutoHeight);
+        if (this.itemFlushHandle != null && typeof window.cancelAnimationFrame === "function") {
+            window.cancelAnimationFrame(this.itemFlushHandle);
+        }
         if (this.timeline) {
             this.timeline.destroy();
         }
     }
+
+    // Coalesce React commits of the item portals: vis calls the item template once per
+    // drawn item during a single draw pass, so we flush once on the next frame rather than
+    // re-rendering for every item.
+    scheduleItemFlush = () => {
+        if (this.itemFlushHandle != null) {
+            return;
+        }
+        const schedule =
+            typeof window.requestAnimationFrame === "function"
+                ? window.requestAnimationFrame
+                : cb => window.setTimeout(cb, 0);
+        this.itemFlushHandle = schedule(() => {
+            this.itemFlushHandle = null;
+            if (this.timeline) {
+                this.forceUpdate();
+            }
+        });
+    };
+
+    // Fill the space from the timeline's top down to the bottom of the viewport, so the
+    // body scrolls internally (pinning the time-axis header) instead of the whole page
+    // scrolling. No-op when a max height is explicitly configured.
+    //
+    // We cannot measure this reliably on the mount frame: on first page load Mendix runs
+    // several async layout passes, so getBoundingClientRect().top reads wrong and the
+    // timeline collapses to the minimum height. A ResizeObserver fires once the box has
+    // actually settled (and again on later layout / viewport changes), so the height is
+    // correct on first render without polling. applyAutoHeight only calls setOptions when
+    // the value actually changes, so observing our own element cannot loop.
+    observeAutoHeight = () => {
+        if (typeof ResizeObserver === "function" && this.ref.current) {
+            this.resizeObserver = new ResizeObserver(this.applyAutoHeight);
+            this.resizeObserver.observe(this.ref.current);
+        }
+        window.addEventListener("resize", this.applyAutoHeight);
+        this.applyAutoHeight();
+    };
+
+    applyAutoHeight = () => {
+        if (!this.timeline || this.props.maxHeight || !this.ref.current) {
+            return;
+        }
+        const top = this.ref.current.getBoundingClientRect().top;
+        const available = Math.max(150, Math.round(window.innerHeight - top));
+        if (available !== this.appliedMaxHeight) {
+            this.appliedMaxHeight = available;
+            this.timeline.setOptions({ maxHeight: `${available}px` });
+        }
+    };
 
     initialize = () => {
         const { itemData, groupData, mouseDown, mouseMove, mouseUp } = this.props;
@@ -144,6 +211,12 @@ export class VisTimeline extends Component {
         // options to add later: format, zoomkey, tooltip settings, height & maxheight, moveable, timeaxisscale
         // item titles will be displayed as a tooltip.
 
+        // Mendix passes numeric attributes as Big/decimal objects. vis-timeline validates
+        // zoomMin/zoomMax as plain numbers and rejects the whole options object otherwise,
+        // so coerce them here.
+        const numericMinZoom = minZoom != null ? Number(minZoom) : undefined;
+        const numericMaxZoom = maxZoom != null ? Number(maxZoom) : undefined;
+
         const options = {
             locale: mx.session.sessionData.locale.code,
             editable: {
@@ -168,8 +241,17 @@ export class VisTimeline extends Component {
             align: "left",
             zoomKey: zoomSetting === "scroll" || zoomSetting === "none" ? "" : zoomSetting,
             zoomable: zoomSetting !== "none",
-            zoomMin: zoomSetting === "none" ? 7200000 : minZoom,
-            zoomMax: zoomSetting === "none" ? 315360000000000 : maxZoom,
+            // Always give the timeline body its own vertical scroll so the pinned
+            // time-axis header stays useful when there are many groups. A draggable
+            // scrollbar is shown regardless of the zoom setting.
+            verticalScroll: true,
+            // When zooming is bound to the scroll wheel, keep the wheel dedicated to
+            // zooming (vertical scrolling is done via the scrollbar). Without this the
+            // wheel would scroll instead of zoom. For the key-based / none settings the
+            // wheel scrolls vertically and only zooms while the zoom key is held.
+            preferZoom: zoomSetting === "scroll",
+            zoomMin: zoomSetting === "none" ? 7200000 : numericMinZoom,
+            zoomMax: zoomSetting === "none" ? 315360000000000 : numericMaxZoom,
             start: timelineStart,
             end: timelineEnd,
             onMove,
@@ -225,6 +307,11 @@ export class VisTimeline extends Component {
         const itemExists = this.portalItems.some(entry => entry.item.id === item.id);
         if (!itemExists) {
             this.portalItems.push({ item, element });
+            // Paint newly drawn items right away instead of waiting until every item in
+            // the dataset has been drawn. On first load vis only draws the items currently
+            // in view, so the "all items drawn" check below may never be met and items
+            // would otherwise stay blank until a scroll forced another draw.
+            this.scheduleItemFlush();
         }
 
         // Check if all the items have been rendered in the dom so we can render all reactnodes.
@@ -362,13 +449,6 @@ export class VisTimeline extends Component {
         }
     }
 
-    redraw = () => {
-        // temporary test function
-        if (this.timeline) {
-            this.timeline.redraw();
-        }
-    };
-
     render() {
         return (
             <div ref={this.ref} className="resource-scheduler">
@@ -377,6 +457,5 @@ export class VisTimeline extends Component {
                 {this.renderItems()}
             </div>
         );
-        //<button onClick={this.redraw}>redraw test</button>
     }
 }
