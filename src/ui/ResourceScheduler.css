@@ -4,6 +4,15 @@
     overflow: hidden;
     background: transparent;
 }
+/* vis-timeline decides an item's *stacking* width from the computed `overflow`
+   of the inner `.vis-item-overflow` frame (RangeItem.repositionX). When that
+   frame is not `hidden`, vis inflates the stacking width by the full content
+   width, so perfectly adjacent items are treated as overlapping and get bumped
+   up a row each (a rising "staircase"). vis-timeline's own stylesheet sets this,
+   but it is not reliably applied in the Mendix runtime, so pin it here. */
+.resource-scheduler .vis-item .vis-item-overflow {
+    overflow: hidden;
+}
 .resource-scheduler .vis-item .vis-item-content {
     padding: 0;
 }
