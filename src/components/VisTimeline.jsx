@@ -314,10 +314,6 @@ export class VisTimeline extends Component {
             this.scheduleItemFlush();
         }
 
-        // Check if all the items have been rendered in the dom so we can render all reactnodes.
-        if (this.amountOfItems === this.portalItems.length) {
-            this.forceUpdate();
-        }
         return "";
     }
 
