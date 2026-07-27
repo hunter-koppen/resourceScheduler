@@ -1,7 +1,7 @@
-import { Component, createElement } from "react";
-
-import { VisTimeline } from "./components/VisTimeline";
 import "./ui/ResourceScheduler.css";
+
+import { Component } from "react";
+import { VisTimeline } from "./components/VisTimeline";
 
 export class ResourceScheduler extends Component {
     dragging = false;

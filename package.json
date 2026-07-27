@@ -1,9 +1,9 @@
 {
   "name": "resourcescheduler",
   "widgetName": "ResourceScheduler",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "",
-  "copyright": "Kobeon BV 2025",
+  "copyright": "Kobeon BV 2026",
   "author": "Hunter Koppen",
   "engines": {
     "node": ">=16"
@@ -28,8 +28,8 @@
     "@mendix/pluggable-widgets-tools": "^11.12.0"
   },
   "dependencies": {
-    "classnames": "^2.2.6",
-    "vis-timeline": "^7.7.3"
+    "classnames": "^2.5.1",
+    "vis-timeline": "^8.5.2"
   },
   "resolutions": {
     "react": "19.0.0",

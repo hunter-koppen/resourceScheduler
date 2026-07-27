@@ -1,8 +1,8 @@
-import { Component, createElement, createRef } from "react";
-import { createPortal } from "react-dom";
-
-import { Timeline, DataSet } from "vis-timeline/standalone";
 import "../../node_modules/vis-timeline/dist/vis-timeline-graph2d.min.css";
+
+import { Component, createRef } from "react";
+import { DataSet, Timeline } from "vis-timeline/standalone";
+import { createPortal } from "react-dom";
 
 export class VisTimeline extends Component {
     ref = createRef();
