@@ -4,6 +4,15 @@
     overflow: hidden;
     background: transparent;
 }
+/* vis-timeline decides an item's *stacking* width from the computed `overflow`
+   of the inner `.vis-item-overflow` frame (RangeItem.repositionX). When that
+   frame is not `hidden`, vis inflates the stacking width by the full content
+   width, so perfectly adjacent items are treated as overlapping and get bumped
+   up a row each (a rising "staircase"). vis-timeline's own stylesheet sets this,
+   but it is not reliably applied in the Mendix runtime, so pin it here. */
+.resource-scheduler .vis-item .vis-item-overflow {
+    overflow: hidden;
+}
 .resource-scheduler .vis-item .vis-item-content {
     padding: 0;
 }
@@ -46,4 +55,28 @@
 .resource-scheduler .vis-label.vis-nesting-group:before {
     display: none;
     content: none;
+}
+/* The timeline body scrolls internally (see verticalScroll option) so the
+   time-axis header stays pinned at the top. Give that header an opaque
+   background and lift it above the scrolling items, otherwise items scroll
+   through and make the header look transparent. */
+.resource-scheduler .vis-panel.vis-top {
+    background-color: white;
+    z-index: 1;
+}
+/* Render the internal vertical scrollbar as a slim, subtle bar instead of the
+   clunky default OS scrollbar. */
+.resource-scheduler .vis-panel.vis-vertical-scroll {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #c5cbd6 transparent;
+}
+.resource-scheduler .vis-panel.vis-vertical-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+.resource-scheduler .vis-panel.vis-vertical-scroll::-webkit-scrollbar-thumb {
+    background: #c5cbd6;
+    border-radius: 4px;
+}
+.resource-scheduler .vis-panel.vis-vertical-scroll::-webkit-scrollbar-track {
+    background: transparent;
 }
