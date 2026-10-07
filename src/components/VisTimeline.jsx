@@ -189,6 +189,19 @@ export class VisTimeline extends Component {
         this.timeline.on("mouseDown", mouseDown);
         this.timeline.on("mouseMove", mouseMove);
         this.timeline.on("mouseUp", mouseUp);
+
+        // vis only fires "rangechanged" after a setWindow, which happens in componentDidUpdate when
+        // the start/end props change. The Dojo client always delivered them in a later update; the
+        // React client has them on the first render, so report the initial (hidden-hours snapped)
+        // window ourselves, otherwise the bound attributes keep the unsnapped values.
+        this.onRangeChanged(this.timeline.getWindow());
+    };
+
+    // The global mx object is being replaced by the mx-api modules, which do not expose the
+    // locale, so read it defensively and fall back to the document language.
+    getLocale = () => {
+        const code = window.mx?.session?.sessionData?.locale?.code;
+        return code || document.documentElement.lang || "en";
     };
 
     getOptions = () => {
@@ -218,7 +231,7 @@ export class VisTimeline extends Component {
         const numericMaxZoom = maxZoom != null ? Number(maxZoom) : undefined;
 
         const options = {
-            locale: mx.session.sessionData.locale.code,
+            locale: this.getLocale(),
             editable: {
                 add: false, // If true, new items can be created by double tapping an empty space in the Timeline. See section Editing Items for a detailed explanation.
                 updateTime: allowDragging, // If true, items can be dragged to another moment in time. See section Editing Items for a detailed explanation.
@@ -406,7 +419,13 @@ export class VisTimeline extends Component {
                 if (!element.innerHTML && this.portalItemCounter <= this.amountOfItems) {
                     this.portalItemCounter += 1;
                     if (this.portalItemCounter === this.amountOfItems) {
-                        this.setState({ amountOfItemPortals: this.portalItemCounter });
+                        // setState during render is not allowed (React warns and may drop it), so defer it
+                        const amountOfItemPortals = this.portalItemCounter;
+                        queueMicrotask(() => {
+                            if (this.timeline) {
+                                this.setState({ amountOfItemPortals });
+                            }
+                        });
                     }
                 }
                 return createPortal(item.content, element, item.id);
@@ -420,11 +439,6 @@ export class VisTimeline extends Component {
         if (this.portalGroups) {
             return this.portalGroups.map(obj => {
                 const { group, element } = obj;
-                if (!element.innerHTML && this.portalGroupCounter <= this.amountOfGroups) {
-                    if (this.portalGroupCounter === this.amountOfGroups) {
-                        this.setState({ amountOfGroupPortals: this.portalGroupCounter });
-                    }
-                }
                 return createPortal(group.content, element, group.id);
             });
         } else {

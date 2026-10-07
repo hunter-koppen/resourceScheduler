@@ -12,8 +12,34 @@ export class ResourceScheduler extends Component {
         backgroundData: []
     };
 
+    // The React client can deliver datasources and expressions already "available" on the first
+    // render (Dojo always started with "loading"), so handle that case here as well.
+    componentDidMount() {
+        const { groupData, appointmentData, backgroundData } = this.props;
+        if (groupData?.status === "available") {
+            this.generateGroups();
+        }
+        if (appointmentData?.status === "available") {
+            this.generateAppointments();
+        }
+        if (backgroundData?.status === "available") {
+            this.generateBackgroundItems();
+        }
+        this.initializeWhenReady();
+    }
+
+    initializeWhenReady() {
+        const { dayStart, dayEnd, hideWeekends } = this.props;
+        // Check if all required fields are populated, then render the timeline
+        if (!this.state.initialize && dayStart?.value && dayEnd?.value && hideWeekends) {
+            this.setState({
+                initialize: true
+            });
+        }
+    }
+
     componentDidUpdate(prevProps) {
-        const { groupData, appointmentData, backgroundData, dayStart, dayEnd, hideWeekends } = this.props;
+        const { groupData, appointmentData, backgroundData } = this.props;
         // datasources are loaded so we can create timeline items from it
         if (prevProps.groupData?.status === "loading" && groupData?.status === "available") {
             this.generateGroups();
@@ -36,12 +62,7 @@ export class ResourceScheduler extends Component {
             this.generateBackgroundItems();
         }
 
-        // Check if all required fields are populated, then render the timeline
-        if (!this.state.initialize && dayStart?.value && dayEnd?.value && hideWeekends) {
-            this.setState({
-                initialize: true
-            });
-        }
+        this.initializeWhenReady();
     }
 
     convertToDate = timeString => {
@@ -158,21 +179,24 @@ export class ResourceScheduler extends Component {
                     }
                 }
             } else if (event.item) {
-                // Handle click on item
-                if (this.props.onItemClick) {
-                    const clickedItem = this.props.itemData.items.find(mxObject => mxObject.id === event.item);
-                    if (clickedItem) {
-                        this.props.onItemClick.get(clickedItem).execute();
+                // Handle click on an appointment (the XML property is onAppointmentClick on appointmentData)
+                const { onAppointmentClick, appointmentData } = this.props;
+                if (onAppointmentClick && appointmentData?.items) {
+                    const clickedItem = appointmentData.items.find(mxObject => mxObject.id === event.item);
+                    const action = clickedItem && onAppointmentClick.get(clickedItem);
+                    if (action?.canExecute) {
+                        action.execute();
                     }
                 }
             } else if (event.what === "group-label") {
                 // Handle click of group
-                if (this.props.onGroupClick) {
+                if (this.props.onGroupClick && this.props.groupData?.items) {
                     const clickedGroup = this.props.groupData.items.find(
                         mxObject => this.props.groupId.get(mxObject).value === event.group
                     );
-                    if (clickedGroup) {
-                        this.props.onGroupClick.get(clickedGroup).execute();
+                    const action = clickedGroup && this.props.onGroupClick.get(clickedGroup);
+                    if (action?.canExecute) {
+                        action.execute();
                     }
                 }
             }
@@ -199,10 +223,11 @@ export class ResourceScheduler extends Component {
         if (eventGroupId) {
             eventGroupId.setValue(item.group);
         }
-        if (onDrag) {
+        if (onDrag && appointmentData?.items) {
             const draggedItem = appointmentData.items.find(mxObject => mxObject.id === item.id);
-            if (draggedItem) {
-                onDrag.get(draggedItem).execute();
+            const action = draggedItem && onDrag.get(draggedItem);
+            if (action?.canExecute) {
+                action.execute();
             }
         }
 
